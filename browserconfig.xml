@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square70x70logo src="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-72.png"/>
+            <square150x150logo src="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-152.png"/>
+            <wide310x150logo src="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-192.png"/>
+            <square310x310logo src="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-192.png"/>
+            <TileColor>#000000</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig>

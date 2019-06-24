@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Shall we play a game? A MtG Life Counter</title>
+        <meta name="description" content="A web app for keeping track of life points when playing Magic the Gathering. Used as a lifecounter for duel, Commander, two-headed giant, teams, pentagram, emperor, and free-for-all games. Supports 2 to 8 players and multiple values for starting life.">
+        <meta name="generator" content="Mitch Dombrausky's Brain">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+        <meta name="google" content="notranslate">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="stylesheet" type="text/css" href="counter.css">
+
+        <!-- start icons and thumbnails from the Wizards of the Coast Magic the Gathering website -->
+        <link rel="icon" type="image/png" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-144.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-96.png">
+        <link rel="shortcut icon" type="image/x-icon" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-57.png">
+        <link rel="apple-touch-icon-precomposed" sizes="16x16" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-16.png">
+        <link rel="apple-touch-icon-precomposed" sizes="32x32" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-32.png">
+        <link rel="apple-touch-icon-precomposed" sizes="36x36" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-36.png">
+        <link rel="apple-touch-icon-precomposed" sizes="48x48" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-48.png">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-57.png">
+        <link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-60.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-72.png">
+        <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-76.png">
+        <link rel="apple-touch-icon-precomposed" sizes="96x96" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-96.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-120.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-152.png">
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-180.png">
+        <link rel="apple-touch-icon-precomposed" sizes="192x192" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-192.png">
+        <!-- end icons and thumbnails from the Wizards of the Coast Magic the Gathering website -->
+    </head>
+    <body class="body">
+        <div id="menu" class="menu">
+            <div class="head">&nbsp;</div>
+            <div class="menu-container">
+                <input id="fullscreen" type="button" class="menu-button" value="Fullscreen" />
+                <input id="replay" type="button" class="menu-button" value="Replay" />
+            </div>
+        </div>
+        <div id="panel" class="panel">
+            <div class="nav">
+                <input type="button" class="toggle-button toggle-button-top" value="☰" />
+            </div>
+            <div id="choose" class="choose">
+                <div class="head">&nbsp;</div>
+                <div class="label">Starting life</div>
+                <select id="startLife" class="startLife" title="Select the number of life points for this game">
+                    <option value="100">100</option>
+                    <option value="80">80</option>
+                    <option value="60">60</option>
+                    <option value="50">50</option>
+                    <option value="40">40</option>
+                    <option value="30">30</option>
+                    <option value="20" selected>20</option>
+                </select>
+                <div class="label">Number of players</div>
+                <div class="button-row-top">
+                    <input type="button" class="button" value="2" title="Two players" />
+                </div>
+                <div class="button-table">
+                    <div class="button-row">
+                        <div class="button-column1">
+                            <input type="button" class="button" value="3" title="Three players" />
+                        </div>
+                        <div class="button-column2">
+                            <input type="button" class="button" value="4" title="Four players" />
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <div class="button-column1">
+                            <input type="button" class="button" value="5" title="Five players" />
+                        </div>
+                        <div class="button-column2">
+                            <input type="button" class="button" value="6" title="Six players" />
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <div class="button-column1">
+                            <input type="button" class="button" value="7" title="Seven players" />
+                        </div>
+                        <div class="button-column2">
+                            <input type="button" class="button" value="8" title="Eight players" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="play" class="play hidden">
+                <div class="row hidden">
+                    <div id="d1" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d1 plus" data-id="d1" value="+" title="+" />
+                        <input type="button" class="d1 minus" data-id="d1" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d1" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d2" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d2 plus" data-id="d2" value="+" title="+" />
+                        <input type="button" class="d2 minus" data-id="d2" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d2" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d3" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d3 plus" data-id="d3" value="+" title="+" />
+                        <input type="button" class="d3 minus" data-id="d3" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d3" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d4" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d4 plus" data-id="d4" value="+" title="+" />
+                        <input type="button" class="d4 minus" data-id="d4" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d4" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d5" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d5 plus" data-id="d5" value="+" title="+" />
+                        <input type="button" class="d5 minus" data-id="d5" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d5" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d6" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d6 plus" data-id="d6" value="+" title="+" />
+                        <input type="button" class="d6 minus" data-id="d6" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d6" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d7" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d7 plus" data-id="d7" value="+" title="+" />
+                        <input type="button" class="d7 minus" data-id="d7" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d7" title="Animate Dead" />
+                    </div>
+                </div>
+                <div class="row hidden">
+                    <div id="d8" class="life"></div>
+                    <div class="buttons">
+                        <input type="button" class="d8 plus" data-id="d8" value="+" title="+" />
+                        <input type="button" class="d8 minus" data-id="d8" value="-" title="-" />
+                        <input type="button" class="animate hidden" data-id="d8" title="Animate Dead" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="application/javascript" src="hammer.2.0.8.min.js"></script>
+        <script type="application/javascript" src="slideout.min.js"></script>
+        <script type="application/javascript" src="counter.js"></script>
+    </body>
+</html>
