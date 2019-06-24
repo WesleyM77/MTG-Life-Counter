@@ -10,7 +10,6 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="stylesheet" type="text/css" href="counter.css">
-
         <!-- start icons and thumbnails from the Wizards of the Coast Magic the Gathering website -->
         <link rel="icon" type="image/png" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-144.png">
         <link rel="icon" type="image/png" sizes="16x16" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-16.png">
@@ -37,20 +36,18 @@
     </head>
     <body class="body">
         <div id="menu" class="menu">
-            <div class="head">&nbsp;</div>
-            <div class="menu-container">
-                <input id="fullscreen" type="button" class="menu-button" value="Fullscreen" />
-                <input id="replay" type="button" class="menu-button" value="Replay" />
-            </div>
+            <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
+            <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Replay" />
+            <input id="restart" type="button" class="menu-button" title="Restart to choose the number of players and starting life" value="Choose Players" />
         </div>
         <div id="panel" class="panel">
-            <div class="nav">
-                <input type="button" class="toggle-button toggle-button-top" value="☰" />
+            <div id="nav" class="nav">
+                <input id="menu_button" type="button" class="toggle-button toggle-button-top hidden" value="☰" />
             </div>
             <div id="choose" class="choose">
                 <div class="head">&nbsp;</div>
                 <div class="label">Starting life</div>
-                <select id="startLife" class="startLife" title="Select the number of life points for this game">
+                <select id="start_life" class="start-life" title="Select the number of life points for this game">
                     <option value="100">100</option>
                     <option value="80">80</option>
                     <option value="60">60</option>
@@ -61,97 +58,97 @@
                 </select>
                 <div class="label">Number of players</div>
                 <div class="button-row-top">
-                    <input type="button" class="button" value="2" title="Two players" />
+                    <input type="button" class="player-button" value="2" title="Two players" />
                 </div>
                 <div class="button-table">
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="button" value="3" title="Three players" />
+                            <input type="button" class="player-button" value="3" title="Three players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="button" value="4" title="Four players" />
+                            <input type="button" class="player-button" value="4" title="Four players" />
                         </div>
                     </div>
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="button" value="5" title="Five players" />
+                            <input type="button" class="player-button" value="5" title="Five players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="button" value="6" title="Six players" />
+                            <input type="button" class="player-button" value="6" title="Six players" />
                         </div>
                     </div>
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="button" value="7" title="Seven players" />
+                            <input type="button" class="player-button" value="7" title="Seven players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="button" value="8" title="Eight players" />
+                            <input type="button" class="player-button" value="8" title="Eight players" />
                         </div>
                     </div>
                 </div>
             </div>
             <div id="play" class="play hidden">
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d1" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d1 plus" data-id="d1" value="+" title="+" />
-                        <input type="button" class="d1 minus" data-id="d1" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d1" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d1" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d1" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d2" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d2 plus" data-id="d2" value="+" title="+" />
-                        <input type="button" class="d2 minus" data-id="d2" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d2" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d2" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d2" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d3" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d3 plus" data-id="d3" value="+" title="+" />
-                        <input type="button" class="d3 minus" data-id="d3" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d3" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d3" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d3" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d4" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d4 plus" data-id="d4" value="+" title="+" />
-                        <input type="button" class="d4 minus" data-id="d4" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d4" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d4" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d4" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d5" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d5 plus" data-id="d5" value="+" title="+" />
-                        <input type="button" class="d5 minus" data-id="d5" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d5" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d5" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d5" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d6" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d6 plus" data-id="d6" value="+" title="+" />
-                        <input type="button" class="d6 minus" data-id="d6" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d6" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d6" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d6" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d7" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d7 plus" data-id="d7" value="+" title="+" />
-                        <input type="button" class="d7 minus" data-id="d7" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d7" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d7" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d7" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="row hidden">
+                <div class="tile hidden">
                     <div id="d8" class="life"></div>
                     <div class="buttons">
-                        <input type="button" class="d8 plus" data-id="d8" value="+" title="+" />
-                        <input type="button" class="d8 minus" data-id="d8" value="-" title="-" />
+                        <input type="button" class="plus" data-id="d8" value="+" title="+" />
+                        <input type="button" class="minus" data-id="d8" value="-" title="-" />
                         <input type="button" class="animate hidden" data-id="d8" title="Animate Dead" />
                     </div>
                 </div>

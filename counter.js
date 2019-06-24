@@ -1,4 +1,5 @@
 /*
+// be sure to tip your service workers before you leave
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
         if (reg.installing) {
@@ -23,6 +24,7 @@ function playerLayoutDefault(activeDivs) {
     }
 }
 function playerLayoutHelper(activeDivs, arrClassNames) {
+    // perpetuate the class struggle
     for (var i = 0; i <  activeDivs.length; i++) {
         var currentClass = activeDivs[i].className;
         activeDivs[i].className = currentClass + " " + arrClassNames[i];
@@ -61,25 +63,25 @@ function setPlayerlayout(numberPlayers) {
     var activeDivs = document.getElementsByClassName("active");
     // select the layout for the total number of players
     switch (numberPlayers) {
-        case 2:
+        case 2: // good lovin'
             playerLayoutTwo(activeDivs);
             break;
-        case 3:
+        case 3: // menage a trois
             playerLayoutThree(activeDivs);
             break;
-        case 4:
+        case 4: // couple swapping
             playerLayoutFour(activeDivs);
             break;
-        case 5:
+        case 5: // are we an orgy already?
             playerLayoutFive(activeDivs);
             break;
-        case 6:
+        case 6: // party time, excellent
             playerLayoutSix(activeDivs);
             break;
-        case 7:
+        case 7: // people enough for everything you want
             playerLayoutSeven(activeDivs);
             break;
-        case 8:
+        case 8: // it smells like sex and candy
             playerLayoutEight(activeDivs);
             break;
         default:
@@ -87,19 +89,21 @@ function setPlayerlayout(numberPlayers) {
             break;
     }
 }
-function setBackgroundAndActive(elem, colorIndex) {
+function setBackgroundAndActive(el, colorIndex) {
     // these are the player colors in order
     var colorClasses = ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"];
     // mark as active and set the background color clas7
-    elem.className = "row active noise " + colorClasses[colorIndex];
+    el.className = "tile active noise " + colorClasses[colorIndex];
 }
 function setStartingLifeTotal(startingLife) {
+    // is this nihilism?
     var life = null;
     if (startingLife != null) {
+        // got the life
         life = startingLife;
     } else {
         // get the select element for the starting life total
-        var selectStartingLife = document.getElementById("startLife");
+        var selectStartingLife = document.getElementById("start_life");
         // get the selected value
         var life = selectStartingLife.options[selectStartingLife.selectedIndex].value;
         if (life == null || life == "") {
@@ -110,14 +114,16 @@ function setStartingLifeTotal(startingLife) {
     // set the value in the life divs
     var lifeDivs = document.getElementsByClassName("life");
     for (var i = 0; i < lifeDivs.length; i++) {
+        // you go now, it's your birthday
         lifeDivs[i].innerText = life;
     }
 }
 function displayRows(numberPlayers, startingLife) {
     // get a collection of all the player rows
-    var divs = document.getElementsByClassName("row");
+    var divs = document.getElementsByClassName("tile");
     // for each player row until we reach the total number of players
     for (var i = 0; i < numberPlayers; i++) {
+        // show some fancy backgrounds or something
         setBackgroundAndActive(divs[i], i);
     }
     // set the right layout for the number of players
@@ -127,33 +133,37 @@ function displayRows(numberPlayers, startingLife) {
     // hide the choose number of players container
     var choose = document.getElementById("choose");
     choose.className = "choose hidden";
+    // show the top menu button
+    var menuButton = document.getElementById("menu_button");
+    menuButton.classList.remove("hidden");
     // show the players container
     var play = document.getElementById("play");
     play.className = "play";
+    // are you ready to ruuuuuuuummble?
 }
-function death(id, elem) {
+function death(id, el) {
     // clear the life total because there is no more life
-    elem.innerText = "";
+    el.innerText = "";
     // disable the plus and minus buttons for this player
     var buttons  = document.getElementsByClassName(id);
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].disabled = true;
     }
-    // add the dead class so we can see the skull
-    elem.className = "life dead";
-    // display the resurrection button
-    var backFromTheDeadButton = elem.nextElementSibling.children[2];
+    // add the dead class so we can see the skull and laugh at them
+    el.className = "life dead";
+    // display the button for the unearth spell
+    var backFromTheDeadButton = el.nextElementSibling.children[2];
     backFromTheDeadButton.className = "animate";
     // we need to change the bg of the parent element
     // this is needed for the six player layout
-    elem.parentElement.style.backgroundColor = "#000000";
-    elem.parentElement.classList.remove("noise");
+    el.parentElement.style.backgroundColor = "#000000";
+    el.parentElement.classList.remove("noise");
 }
-function animateDead(id, elem, btn) {
+function animateDead(id, el, btn) {
     // remove the dead class
-    elem.className = "life";
+    el.className = "life";
     // you start again with 1 life
-    elem.innerText = "1";
+    el.innerText = "1";
     // enable the plus and minus buttons
     var buttons  = document.getElementsByClassName(id);
     for (var i = 0; i < buttons.length; i++) {
@@ -161,19 +171,19 @@ function animateDead(id, elem, btn) {
     }
     // hide the resurrection button
     btn.className = "animate hidden";
-    // change the background color back from black
-    elem.parentElement.classList.add("noise");
-    elem.parentElement.removeAttribute("style");
+    // back from black
+    el.parentElement.classList.add("noise");
+    el.parentElement.removeAttribute("style");
 }
-function displayLife(id, elem, intTotal) {
+function displayLife(id, el, intTotal) {
     // is the player dead yet?
     if (intTotal <= 0) {
         // yes, they drink with the gods in Valhalla
-        death(id, elem);
+        death(id, el);
     } else {
         // no, they are not dead yet, they feel happy
         // display their remaining life total
-        elem.innerText = intTotal.toString();
+        el.innerText = intTotal.toString();
     }
 }
 function changeLife(id, change) {
@@ -188,25 +198,27 @@ function changeLife(id, change) {
         var intChange = parseInt(change);
         // maths is hard
         var intNewTotal = intCurrentTotal + intChange;
-        // display the new life total
+        // display the new life total, tada!
         displayLife(id, totalDiv, intNewTotal);
     }
 }
 function plusLife(id) {
-    // add one to the life total
+    // add one to the life total because lifelink or whatever stupid shit
     changeLife(id, 1);
 }
 function minusLife(id) {
-    // subtract one from the life total
+    // subtract one from the life total, oh the horror
     changeLife(id, -1);
 }
-function mousedownChangeValue(elem) {
+function mousedownChangeValue(el) {
     // get the data-id from the button
-    var id = elem.dataset.id;
+    var id = el.dataset.id;
     // the button class tells us if we need to add or subtract from the life total
-    if (elem.className.includes("plus")) {
+    if (el.className.includes("plus")) {
+        // we all want more
         plusLife(id);
-    } else if (elem.className.includes("minus")) {
+    } else if (el.className.includes("minus")) {
+        // too many cigarettes or something
         minusLife(id);
     }
 }
@@ -224,11 +236,20 @@ function toggleFullScreen() {
         cancelFullScreen.call(doc);
     }
 }
-function replay() {
-    alert("todo");
+function replay(e) {
+    // TODO: replay
+    closeSlideMenu(e);
 }
-// TODO: press will open a flyout menu for
-// that player and not change the life total
+function restart(e) {
+    // TODO: restart
+    closeSlideMenu(e);
+}
+//
+// DISABLE PRESS TEMPORARILY
+// TODO: instead of adding or subtracting life on press
+// will open a menu of actions for that player tile
+//
+/*
 var g_pressTimer = null;
 function runPressTimer(e) {
     // change the life total unless it is 2 or less
@@ -276,13 +297,18 @@ function finishPress(e) {
         g_pressed = false;
     }
 }
+*/
 function getParamAndValidate(urlParams, paramName, rangeBottom, rangeTop) {
     var returnValue = null;
     var paramValue = urlParams.get(paramName);
     if (paramValue != null) {
+        // if we have something then cast an int spell
         var intParam = parseInt(paramValue);
         if (intParam != null && !isNaN(intParam)) {
+            // int spell was not counterspelled
             returnValue = intParam;
+            // if we have added too many +1/+1 counters we should take them off
+            // if we didn't add enough then more +1/+1 counters for you
             if (returnValue > rangeTop) {
                 returnValue = rangeTop;
             } else if (returnValue < rangeBottom) {
@@ -290,6 +316,7 @@ function getParamAndValidate(urlParams, paramName, rangeBottom, rangeTop) {
             }
 
         } else if (isNaN(intParam)) {
+            // frak, we don't know what is happening
             intParam = null;
         }
     }
@@ -297,28 +324,39 @@ function getParamAndValidate(urlParams, paramName, rangeBottom, rangeTop) {
 }
 function handleQueryString()
 {
+    // check for query params
     var urlParams = new URLSearchParams(location.search);
-    if (urlParams.has("p") || urlParams.has("l")) {
+    // we are looking for "p" which is number of players
+    // and "l" which is the starting life total
+    if (urlParams != null && (urlParams.has("p") || urlParams.has("l"))) {
+        // check yourself before you wreck yourself
         var numberPlayers = getParamAndValidate(urlParams, "p", 2, 8);
         var startingLife = getParamAndValidate(urlParams, "l", 1, 999);
         if (numberPlayers != null) {
+            if (startingLife == null) {
+                startingLife = 20;
+            }
+            // round 1: fight!
             displayRows(numberPlayers, startingLife);
         }
     }
 }
 function handleSwipeLeft(e) {
     if (g_slideOutMenu != null) {
+        // we gotta close now, you don't have
+        // to go home but you can't stay here
         g_slideOutMenu.close();
     }
 }
 function handleSwipeRight(e) {
     if (g_slideOutMenu != null) {
+        // yay! we're doing stuff
         g_slideOutMenu.open();
     }
 }
-function initTouchyFeelyHandsyStuff(elem) {
-    // you can touch this, it's hammer time
-    var hammerTime = new Hammer(elem);
+function initTouchyFeelyHandsyStuff(el) {
+    // you *can* touch this, it's hammer time
+    var hammerTime = new Hammer(el);
     hammerTime.on("swipeleft", function(e) {
         e.preventDefault();
         handleSwipeLeft(e);
@@ -327,6 +365,7 @@ function initTouchyFeelyHandsyStuff(elem) {
         e.preventDefault();
         handleSwipeRight(e);
     });
+/*
     hammerTime.get("pan").set({ direction: Hammer.DIRECTION_ALL });
     hammerTime.on("press", function(e) {
         e.preventDefault();
@@ -340,31 +379,33 @@ function initTouchyFeelyHandsyStuff(elem) {
         e.preventDefault();
         handlePanEnd(e);
     });
+*/
 }
 var g_slideOutMenu = null;
 function closeSlideMenu(e) {
   e.preventDefault();
   if (g_slideOutMenu != null) {
+      // we like to move it move it
       g_slideOutMenu.close();
   }
 }
 window.addEventListener("DOMContentLoaded", function(e) {
     // add listener to the number of player buttons
-    var numberPlayersButtons  = document.getElementsByClassName("button");
-    for (var i = 0; i < numberPlayersButtons.length; i++) {
-        numberPlayersButtons[i].addEventListener("click", function(e) {
+    var numberPlayersButtons  = document.getElementsByClassName("player-button");
+    for (var a = 0; a < numberPlayersButtons.length; a++) {
+        numberPlayersButtons[a].addEventListener("click", function(e) {
             var numberPlayers = parseInt(e.srcElement.value);
             displayRows(numberPlayers, null);
         }, false);
     }
     // for each of the plus and minus buttons
     var buttonClasses = ["plus", "minus"];
-    for (var i = 0; i < buttonClasses.length; i++) {
+    for (var b = 0; b < buttonClasses.length; b++) {
         // get all of the buttons by type (plus or minus)
-        var buttons  = document.getElementsByClassName(buttonClasses[i]);
-        for (var j = 0; j < buttons.length; j++) {
+        var buttons  = document.getElementsByClassName(buttonClasses[b]);
+        for (var c = 0; c < buttons.length; c++) {
             // for each button we need to add the mouse event handlers
-            var btn = buttons[j];
+            var btn = buttons[c];
             btn.addEventListener("click", function(e) {
                 mousedownChangeValue(e.srcElement);
             }, false);
@@ -374,15 +415,15 @@ window.addEventListener("DOMContentLoaded", function(e) {
     }
     // add handler for the animate dead buttons
     var animateDeadButtons  = document.getElementsByClassName("animate");
-    for (var i = 0; i < animateDeadButtons.length; i++) {
-        animateDeadButtons[i].addEventListener("click", function(e) {
+    for (var d = 0; d < animateDeadButtons.length; d++) {
+        animateDeadButtons[d].addEventListener("click", function(e) {
             var btn = e.srcElement;
             var id = btn.dataset.id;
             var elem = document.getElementById(id);
             animateDead(id, elem, btn);
         }, false);
     }
-    // handle params
+    // handle any query params
     handleQueryString();
     // init slide menu
     g_slideOutMenu = new Slideout({
@@ -393,8 +434,8 @@ window.addEventListener("DOMContentLoaded", function(e) {
     });
     g_slideOutMenu.enableTouch();
     var toggleButtons = document.getElementsByClassName("toggle-button");
-    for (var i = 0; i < toggleButtons.length; i++) {
-        toggleButtons[i].addEventListener("click", function(e) {
+    for (var f = 0; f < toggleButtons.length; f++) {
+        toggleButtons[f].addEventListener("click", function(e) {
             g_slideOutMenu.toggle();
         }, false);
     }
@@ -416,13 +457,11 @@ window.addEventListener("DOMContentLoaded", function(e) {
     // add handler for the replay button
     var replayButton = document.getElementById("replay");
     replayButton.addEventListener("click", function(e) {
-        replay();
+        replay(e);
+    }, false);
+    // add handler for the restart button
+    var restartButton = document.getElementById("restart");
+    restartButton.addEventListener("click", function(e) {
+        restart(e);
     }, false);
 });
-
-
-/* todo
- * don't show top menu button when on choose screen, only on players screen
- * change orientation on 7 and 8 player layouts (top two are 180deg middle 2 onright 90deg, middle 2 left -90deg etc)
- * need to change css values width heightt for lanscape orientation
-*/
