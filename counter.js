@@ -147,6 +147,21 @@ function displayTiles() {
         }
     }
 }
+function showFirstPlayerDialog() {
+    // summon a Math Random to see who begins
+    var startingPlayer = Math.floor(Math.random() * g_numberPlayers + 1);
+    // set the text for the glorius, wondrous leader of the game
+    var text = document.getElementById("starting_player_dialog_text");
+    text.innerText = "Player " + startingPlayer.toString() + " begins!";
+    // kick some goblins and get them to display the dialog
+    var dialog = document.getElementById("starting_player_dialog");
+    dialog.classList.remove("hidden");
+}
+function hideFirstPlayerDialog() {
+    // bury the dialog
+    var dialog = document.getElementById("starting_player_dialog");
+    dialog.classList.add("hidden");
+}
 var g_numberPlayers = 0;
 function newGame(startingLife) {
     // display the player tiles we will need and hide the rest
@@ -166,6 +181,8 @@ function newGame(startingLife) {
     // show the players container
     var play = document.getElementById("play");
     play.classList.remove("hidden");
+    // roll some digital dice to see who goes first
+    showFirstPlayerDialog();
 }
 function death(el) {
     // clear the life total because there is no more life
@@ -424,5 +441,10 @@ window.addEventListener("DOMContentLoaded", function(e) {
     var restartButton = document.getElementById("restart");
     restartButton.addEventListener("click", function(e) {
         restart(e);
+    }, false);
+    // add handler for the first player dialog button
+    var startPlayerButton = document.getElementById("starting_player_dialog_button");
+    startPlayerButton.addEventListener("click", function(e) {
+        hideFirstPlayerDialog();
     }, false);
 });
