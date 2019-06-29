@@ -347,6 +347,40 @@ function handleSwipeRight(e) {
         g_slideOutMenu.open();
     }
 }
+function getCurrentColor(e) {
+    // what were we pressing on?
+    var targetButton = e.target;
+    // only handle plus / minus button press up events
+    if (targetButton != null && (targetButton.classList.contains("plus") || targetButton.classList.contains("minus"))) {
+        // get the player tile element that has the class with the background color on it from the page on the site with the stuff
+        var playerTile = targetButton.parentElement.parentElement;
+        if (playerTile != null && playerTile.classList.contains("tile")) {
+            // this returns a rgb string like so "rgb(30, 144, 255)"
+            return window.getComputedStyle(playerTile).getPropertyValue("background-color");
+        }
+    }
+    return null;
+}
+function RgbStringToHex(rgb) {
+    rgb = rgb.substr(4).split(")")[0].split(",");
+
+    var r = (+rgb[0]).toString(16),
+        g = (+rgb[1]).toString(16),
+        b = (+rgb[2]).toString(16);
+
+    r = (r.length == 1) ? "0" + r : r;
+    g = (g.length == 1) ? "0" + g : g;
+    b = (b.length == 1) ? "0" + b : b;
+
+    return "#" + r + g + b;
+}
+function handlePressUp(e) {
+    var currentColorRgb = getCurrentColor(e);
+    if (currentColorRgb != null) {
+        var hex = RgbStringToHex(currentColorRgb);
+        // todo implement colorpicker flyout
+    }
+}
 function initTouchyFeelyHandsyStuff(el) {
     // you *can* touch this, it's hammer time
     var hammerTime = new Hammer(el);
@@ -357,6 +391,10 @@ function initTouchyFeelyHandsyStuff(el) {
     hammerTime.on("swiperight", function(e) {
         e.preventDefault();
         handleSwipeRight(e);
+    });
+    hammerTime.on("pressup", function(e) {
+        e.preventDefault();
+        handlePressUp(e);
     });
 }
 var g_slideOutMenu = null;
