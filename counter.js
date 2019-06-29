@@ -1,19 +1,17 @@
-/*
 // be sure to tip your service workers before you leave
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(reg) {
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").then(function(reg) {
         if (reg.installing) {
-            console.log('Service worker installing');
+            console.log("Service worker installing");
         } else if (reg.waiting) {
-            console.log('Service worker installed');
+            console.log("Service worker installed");
         } else if (reg.active) {
-            console.log('Service worker active');
+            console.log("Service worker active");
         }
     }).catch(function(error) {
-        console.log('Registration failed with ' + error);
+        console.log("Registration failed with " + error);
     });
 }
-*/
 function playerLayoutDefault(activeDivs) {
     // sizes for the default vertical layout
     var defaultVerticalSizes = [null,   "100%", "50%", "33.3%", "25%", "20%", "16.6%", "14.28%", "12.5%"];
