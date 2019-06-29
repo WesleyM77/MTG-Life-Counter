@@ -36,9 +36,17 @@
     </head>
     <body class="body">
         <div id="menu" class="menu">
-            <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
+            <div class="head menu-head">&nbsp;</div>
+            <input id="restart" type="button" class="menu-button" title="Start a new game and choose the number of players and starting life" value="New Game" />
             <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Replay" />
-            <input id="restart" type="button" class="menu-button" title="Restart to choose the number of players and starting life" value="Choose Players" />
+            <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
+            <div class="menu-divider"></div>
+            <a class="menu-button" href="https://magic.wizards.com/en/game-info/gameplay/rules-and-formats/rules" target="_new" title="Magic the Gathering Rules">Rules</a>
+            <a class="menu-button" href="https://gatherer.wizards.com/Pages/Advanced.aspx" target="_new" title="Gatherer Advanced Search">Card Search</a>
+            <a class="menu-button" href="https://www.cardmarket.com/en/Magic" target="_new" title="cardmarket.com/en/Magic">cardmarket</a>
+            <div class="credits">
+                Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
+            </div>
         </div>
         <div id="panel" class="panel">
             <div id="nav" class="nav">
@@ -88,7 +96,7 @@
                 </div>
             </div>
             <div id="play" class="play hidden">
-                <div class="tile hidden">
+                <div class="tile noise c0 hidden">
                     <div id="d1" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d1" value="+" title="+" />
@@ -96,7 +104,7 @@
                         <input type="button" class="animate hidden" data-id="d1" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c1 hidden">
                     <div id="d2" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d2" value="+" title="+" />
@@ -104,7 +112,7 @@
                         <input type="button" class="animate hidden" data-id="d2" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c2 hidden">
                     <div id="d3" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d3" value="+" title="+" />
@@ -112,7 +120,7 @@
                         <input type="button" class="animate hidden" data-id="d3" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c3 hidden">
                     <div id="d4" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d4" value="+" title="+" />
@@ -120,7 +128,7 @@
                         <input type="button" class="animate hidden" data-id="d4" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c4 hidden">
                     <div id="d5" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d5" value="+" title="+" />
@@ -128,7 +136,7 @@
                         <input type="button" class="animate hidden" data-id="d5" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c5 hidden">
                     <div id="d6" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d6" value="+" title="+" />
@@ -136,7 +144,7 @@
                         <input type="button" class="animate hidden" data-id="d6" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c6 hidden">
                     <div id="d7" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d7" value="+" title="+" />
@@ -144,7 +152,7 @@
                         <input type="button" class="animate hidden" data-id="d7" title="Animate Dead" />
                     </div>
                 </div>
-                <div class="tile hidden">
+                <div class="tile noise c7 hidden">
                     <div id="d8" class="life"></div>
                     <div class="buttons">
                         <input type="button" class="plus" data-id="d8" value="+" title="+" />

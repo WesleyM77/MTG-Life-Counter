@@ -20,6 +20,7 @@ function playerLayoutDefault(activeDivs) {
     // set the height and display of the active player rows
     for (var i = 0; i < activeDivs.length; i++) {
         activeDivs[i].style.height = defaultVerticalSizes[activeDivs.length];
+        // charlie brown you blockhead
         activeDivs[i].style.display = "block";
     }
 }
@@ -58,11 +59,11 @@ function playerLayoutEight(activeDivs) {
     var classNames = Array(8).fill("eight");
     playerLayoutHelper(activeDivs, classNames);
 }
-function setPlayerlayout(numberPlayers) {
+function setPlayerlayout() {
     // these are the player rows we want to display
     var activeDivs = document.getElementsByClassName("active");
     // select the layout for the total number of players
-    switch (numberPlayers) {
+    switch (g_numberPlayers) {
         case 2: // good lovin'
             playerLayoutTwo(activeDivs);
             break;
@@ -89,97 +90,118 @@ function setPlayerlayout(numberPlayers) {
             break;
     }
 }
-function setBackgroundAndActive(el, colorIndex) {
-    // these are the player colors in order
-    var colorClasses = ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"];
-    // mark as active and set the background color clas7
-    el.className = "tile active noise " + colorClasses[colorIndex];
+function setStartingLifeTotal(life) {
+    // set the value in the life divs
+    var lifeDivs = document.getElementsByClassName("life");
+    for (var i = 0; i < lifeDivs.length; i++) {
+        // you go now, it's your birthday, it's your birthday
+        lifeDivs[i].innerText = life;
+    }
 }
-function setStartingLifeTotal(startingLife) {
+function getStartingLifeTotal(startingLife) {
     // is this nihilism?
     var life = null;
     if (startingLife != null) {
-        // got the life
-        life = startingLife;
+        // we should check the rules to see if this is allowed
+        var iLife = parseInt(startingLife);
+        // setting the starting life to force of nature is just not possible
+        if (isNaN(iLife)) {
+            life = "20";
+        } else {
+            // should not have too much or too little life
+            if (iLife > 100) {
+                life = "100";
+            } else if (iLife < 20) {
+                life = "20";
+            } else {
+                // got the life
+                life = startingLife;
+            }
+        }
     } else {
         // get the select element for the starting life total
         var selectStartingLife = document.getElementById("start_life");
         // get the selected value
         var life = selectStartingLife.options[selectStartingLife.selectedIndex].value;
+        // if the universe hates us and we have no life
         if (life == null || life == "") {
-            // default to 20 life points if we were not able to get the value from the select element
+            // default to 20 life points because this is a nice number, not a mean number like 7
             life = "20";
         }
     }
-    // set the value in the life divs
-    var lifeDivs = document.getElementsByClassName("life");
-    for (var i = 0; i < lifeDivs.length; i++) {
-        // you go now, it's your birthday
-        lifeDivs[i].innerText = life;
+    return life;
+}
+function displayTiles() {
+    // get a collection of all the player tiles
+    var divs = document.getElementsByClassName("tile");
+    // for each player tile cast some instants
+    for (var i = 0; i < divs.length; i++) {
+        // reset the normal css classes
+        divs[i].className = "tile noise c" + i;
+        // make sure everyone has a pulse before we begin
+        animateDead(divs[i].children[0]);
+        if (i < g_numberPlayers) {
+            // these are the tiles for those about to throw down
+            divs[i].classList.add("active");
+        } else {
+            // all of the other player tiles should be placed in exile
+            divs[i].classList.add("hidden");
+        }
     }
 }
-function displayRows(numberPlayers, startingLife) {
-    // get a collection of all the player rows
-    var divs = document.getElementsByClassName("tile");
-    // for each player row until we reach the total number of players
-    for (var i = 0; i < numberPlayers; i++) {
-        // show some fancy backgrounds or something
-        setBackgroundAndActive(divs[i], i);
-    }
-    // set the right layout for the number of players
-    setPlayerlayout(numberPlayers);
+var g_numberPlayers = 0;
+function newGame(startingLife) {
+    // display the player tiles we will need and hide the rest
+    displayTiles();
+    // get the starting life total
+    var life = getStartingLifeTotal(startingLife);
     // set the starting life total
-    setStartingLifeTotal(startingLife);
+    setStartingLifeTotal(life);
+    // set the right layout for the number of players
+    setPlayerlayout();
     // hide the choose number of players container
     var choose = document.getElementById("choose");
-    choose.className = "choose hidden";
+    choose.classList.add("hidden");
     // show the top menu button
     var menuButton = document.getElementById("menu_button");
     menuButton.classList.remove("hidden");
     // show the players container
     var play = document.getElementById("play");
-    play.className = "play";
-    // are you ready to ruuuuuuuummble?
+    play.classList.remove("hidden");
 }
-function death(id, el) {
+function death(el) {
     // clear the life total because there is no more life
     el.innerText = "";
-    // disable the plus and minus buttons for this player
-    var buttons  = document.getElementsByClassName(id);
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].disabled = true;
-    }
-    // add the dead class so we can see the skull and laugh at them
-    el.className = "life dead";
+    // add the death class so we can see the skull and laugh at them
+    el.classList.add("death");
+    // hide the plus and minus buttons for this player
+    var plusButton = el.nextElementSibling.children[0];
+    plusButton.classList.add("hidden");
+    var minusButton = el.nextElementSibling.children[1];
+    minusButton.classList.add("hidden");
     // display the button for the unearth spell
     var backFromTheDeadButton = el.nextElementSibling.children[2];
-    backFromTheDeadButton.className = "animate";
-    // we need to change the bg of the parent element
-    // this is needed for the six player layout
-    el.parentElement.style.backgroundColor = "#000000";
-    el.parentElement.classList.remove("noise");
+    backFromTheDeadButton.classList.remove("hidden");
 }
-function animateDead(id, el, btn) {
-    // remove the dead class
-    el.className = "life";
+function animateDead(el) {
     // you start again with 1 life
     el.innerText = "1";
-    // enable the plus and minus buttons
-    var buttons  = document.getElementsByClassName(id);
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].disabled = false;
-    }
+    // sorcery to remove death
+    el.classList.remove("death");
+    // show the plus and minus buttons for this player
+    var plusButton = el.nextElementSibling.children[0];
+    plusButton.classList.remove("hidden");
+    var minusButton = el.nextElementSibling.children[1];
+    minusButton.classList.remove("hidden");
     // hide the resurrection button
-    btn.className = "animate hidden";
-    // back from black
-    el.parentElement.classList.add("noise");
-    el.parentElement.removeAttribute("style");
+    var backFromTheDeadButton = el.nextElementSibling.children[2];
+    backFromTheDeadButton.classList.add("hidden");
 }
-function displayLife(id, el, intTotal) {
+function displayLife(el, intTotal) {
     // is the player dead yet?
     if (intTotal <= 0) {
         // yes, they drink with the gods in Valhalla
-        death(id, el);
+        death(el);
     } else {
         // no, they are not dead yet, they feel happy
         // display their remaining life total
@@ -191,16 +213,14 @@ function changeLife(id, change) {
     var totalDiv = document.getElementById(id);
     // get the text content (their current life total)
     var strCurrentTotal = totalDiv.innerText;
-    if (strCurrentTotal != null && strCurrentTotal != "") {
-        // convert the text to an integer
-        var intCurrentTotal = parseInt(strCurrentTotal);
-        // the amount of change should be an integer too
-        var intChange = parseInt(change);
-        // maths is hard
-        var intNewTotal = intCurrentTotal + intChange;
-        // display the new life total, tada!
-        displayLife(id, totalDiv, intNewTotal);
-    }
+    // convert the text to an integer
+    var intCurrentTotal = parseInt(strCurrentTotal);
+    // the amount of change should be an integer too
+    var intChange = parseInt(change);
+    // maths is hard
+    var intNewTotal = intCurrentTotal + intChange;
+    // display the new life total, tada!
+    displayLife(totalDiv, intNewTotal);
 }
 function plusLife(id) {
     // add one to the life total because lifelink or whatever stupid shit
@@ -237,67 +257,24 @@ function toggleFullScreen() {
     }
 }
 function replay(e) {
-    // TODO: replay
+    // just one more game, just one more
+    newGame();
+    // end of turn for menu
     closeSlideMenu(e);
 }
 function restart(e) {
-    // TODO: restart
+    // show the choose number of players container
+    var choose = document.getElementById("choose");
+    choose.classList.remove("hidden");
+    // hide the top menu button
+    var menuButton = document.getElementById("menu_button");
+    menuButton.classList.add("hidden");
+    // hide the players container
+    var play = document.getElementById("play");
+    play.classList.add("hidden");
+    // end of turn for menu
     closeSlideMenu(e);
 }
-//
-// DISABLE PRESS TEMPORARILY
-// TODO: instead of adding or subtracting life on press
-// will open a menu of actions for that player tile
-//
-/*
-var g_pressTimer = null;
-function runPressTimer(e) {
-    // change the life total unless it is 2 or less
-    // just to be certain the user should manually click
-    // the remaining life out of the poor bastard
-    var id = e.target.dataset.id;
-    var lifeTotalElement = document.getElementById(id);
-    var intLifeTotal = parseInt(lifeTotalElement.innerText);
-    if (e.target.value == "-" && intLifeTotal <= 2) {
-        finishPress(e);
-    } else {
-        mousedownChangeValue(e.target);
-        // if we have a timer already destroy it
-        if (g_pressTimer != null) {
-            clearPressTimer();
-        }
-        // take another turn
-        g_pressTimer = window.setTimeout(function() {
-            runPressTimer(e);
-        }, 250);
-    }
-}
-function clearPressTimer() {
-    // remove target timer from the game
-    window.clearTimeout(g_pressTimer);
-    g_pressTimer = null;
-}
-var g_pressed = false;
-function handlePress(e) {
-    g_pressed = true;
-    // start an infinite combo
-    g_pressTimer = window.setTimeout(function() {
-        runPressTimer(e);
-    }, 500);
-}
-function handlePressUp(e) {
-    finishPress(e);
-}
-function handlePanEnd(e) {
-    finishPress(e);
-}
-function finishPress(e) {
-    if (g_pressed) {
-        clearPressTimer();
-        g_pressed = false;
-    }
-}
-*/
 function getParamAndValidate(urlParams, paramName, rangeBottom, rangeTop) {
     var returnValue = null;
     var paramValue = urlParams.get(paramName);
@@ -333,11 +310,12 @@ function handleQueryString()
         var numberPlayers = getParamAndValidate(urlParams, "p", 2, 8);
         var startingLife = getParamAndValidate(urlParams, "l", 1, 999);
         if (numberPlayers != null) {
+            g_numberPlayers = numberPlayers;
             if (startingLife == null) {
                 startingLife = 20;
             }
             // round 1: fight!
-            displayRows(numberPlayers, startingLife);
+            newGame(startingLife);
         }
     }
 }
@@ -365,21 +343,6 @@ function initTouchyFeelyHandsyStuff(el) {
         e.preventDefault();
         handleSwipeRight(e);
     });
-/*
-    hammerTime.get("pan").set({ direction: Hammer.DIRECTION_ALL });
-    hammerTime.on("press", function(e) {
-        e.preventDefault();
-        handlePress(e);
-    });
-    hammerTime.on("pressup", function(e) {
-        e.preventDefault();
-        handlePressUp(e);
-    });
-    hammerTime.on("panend", function(e) {
-        e.preventDefault();
-        handlePanEnd(e);
-    });
-*/
 }
 var g_slideOutMenu = null;
 function closeSlideMenu(e) {
@@ -394,8 +357,8 @@ window.addEventListener("DOMContentLoaded", function(e) {
     var numberPlayersButtons  = document.getElementsByClassName("player-button");
     for (var a = 0; a < numberPlayersButtons.length; a++) {
         numberPlayersButtons[a].addEventListener("click", function(e) {
-            var numberPlayers = parseInt(e.srcElement.value);
-            displayRows(numberPlayers, null);
+            g_numberPlayers = parseInt(e.srcElement.value);
+            newGame();
         }, false);
     }
     // for each of the plus and minus buttons
@@ -419,8 +382,8 @@ window.addEventListener("DOMContentLoaded", function(e) {
         animateDeadButtons[d].addEventListener("click", function(e) {
             var btn = e.srcElement;
             var id = btn.dataset.id;
-            var elem = document.getElementById(id);
-            animateDead(id, elem, btn);
+            var el = document.getElementById(id);
+            animateDead(el);
         }, false);
     }
     // handle any query params
