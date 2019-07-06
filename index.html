@@ -34,11 +34,13 @@
         <link rel="apple-touch-icon-precomposed" sizes="192x192" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-192.png">
         <!-- end icons and thumbnails from the Wizards of the Coast Magic the Gathering website -->
     </head>
-    <body class="body">
+    <body class="body noselect">
+        <div id="mask" class="mask hidden"></div>
         <div id="menu" class="menu">
             <div class="head menu-head">&nbsp;</div>
             <input id="restart" type="button" class="menu-button" title="Start a new game and choose the number of players and starting life" value="New Game" />
             <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Replay" />
+            <input id="random" type="button" class="menu-button" title="Choose a random player to start the round" value="Random Player" />
             <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
             <div class="menu-divider"></div>
             <a class="menu-button" href="https://magic.wizards.com/en/game-info/gameplay/rules-and-formats/rules" target="_new" title="Magic the Gathering Rules">Rules</a>
@@ -46,14 +48,11 @@
             <a class="menu-button" href="https://www.cardmarket.com/en/Magic" target="_new" title="cardmarket.com/en/Magic">cardmarket</a>
             <a class="menu-button" href="mailto:achimba@hotmail.com" title="Email Mitch about issues and feature requests">Contact</a>
             <div class="credits">
-                <a class="mitch" href="#" target="_new">©2019 Mitch Dombrausky</a>
+                ©2019 Mitch D<a class="mitch" href="#" target="_new">o</a>mbrausky
                 Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
             </div>
         </div>
         <div id="panel" class="panel">
-            <div id="nav" class="nav">
-                <input id="menu_button" type="button" class="toggle-button toggle-button-top hidden" value="☰" />
-            </div>
             <div id="choose" class="choose">
                 <div class="head">&nbsp;</div>
                 <div class="label">Starting life</div>
@@ -165,11 +164,10 @@
             </div>
         </div>
         <div id="starting_player_dialog" class="starting-player-dialog hidden">
-            <div class="starting-player-dialog-container">
-                <div id="starting_player_dialog_text" class="starting-player-dialog-text">Player 2 starts</div>
-                <input id="starting_player_dialog_button" type="button" class="starting-player-dialog-button" value="OK" title="OK" />
-            </div>
+            <div id="starting_player_dialog_text" class="starting-player-dialog-text"></div>
+            <input id="starting_player_dialog_button" type="button" class="starting-player-dialog-button" value="OK" title="OK" />
         </div>
+        <div id="colorpicker" class="colorpicker hidden"></div>
         <script type="application/javascript" src="hammer.2.0.8.min.js"></script>
         <script type="application/javascript" src="slideout.min.js"></script>
         <script type="application/javascript" src="counter.min.js"></script>

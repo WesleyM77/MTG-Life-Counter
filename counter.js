@@ -12,6 +12,24 @@ if ("serviceWorker" in navigator) {
         console.log("Registration failed with " + error);
     });
 }
+function show(id, el) {
+    var elem = el;
+    if (elem == null) {
+        elem = document.getElementById(id);
+    }
+    if (elem != null) {
+        elem.classList.remove("hidden");
+    }
+}
+function hide(id, el) {
+    var elem = el;
+    if (elem == null) {
+        elem = document.getElementById(id);
+    }
+    if (elem != null) {
+        elem.classList.add("hidden");
+    }
+}
 function playerLayoutDefault(activeDivs) {
     // sizes for the default vertical layout
     var defaultVerticalSizes = [null,   "100%", "50%", "33.3%", "25%", "20%", "16.6%", "14.28%", "12.5%"];
@@ -153,14 +171,14 @@ function showFirstPlayerDialog() {
     // set the text for the glorius, wondrous leader of the game
     var text = document.getElementById("starting_player_dialog_text");
     text.innerText = "Player " + startingPlayer.toString() + " begins!";
+    showMask();
     // kick some goblins and get them to display the dialog
-    var dialog = document.getElementById("starting_player_dialog");
-    dialog.classList.remove("hidden");
+    show("starting_player_dialog");
 }
 function hideFirstPlayerDialog() {
+    hideMask();
     // bury the dialog
-    var dialog = document.getElementById("starting_player_dialog");
-    dialog.classList.add("hidden");
+    hide("starting_player_dialog");
 }
 var g_numberPlayers = 0;
 function newGame(startingLife) {
@@ -173,16 +191,9 @@ function newGame(startingLife) {
     // set the right layout for the number of players
     setPlayerlayout();
     // hide the choose number of players container
-    var choose = document.getElementById("choose");
-    choose.classList.add("hidden");
-    // show the top menu button
-    var menuButton = document.getElementById("menu_button");
-    menuButton.classList.remove("hidden");
+    hide("choose");
     // show the players container
-    var play = document.getElementById("play");
-    play.classList.remove("hidden");
-    // roll some digital dice to see who goes first
-    showFirstPlayerDialog();
+    show("play");
 }
 function death(el) {
     // clear the life total because there is no more life
@@ -190,13 +201,10 @@ function death(el) {
     // add the death class so we can see the skull and laugh at them
     el.classList.add("death");
     // hide the plus and minus buttons for this player
-    var plusButton = el.nextElementSibling.children[0];
-    plusButton.classList.add("hidden");
-    var minusButton = el.nextElementSibling.children[1];
-    minusButton.classList.add("hidden");
+    hide(null, el.nextElementSibling.children[0]);
+    hide(null, el.nextElementSibling.children[1]);
     // display the button for the unearth spell
-    var backFromTheDeadButton = el.nextElementSibling.children[2];
-    backFromTheDeadButton.classList.remove("hidden");
+    show(null, el.nextElementSibling.children[2]);
 }
 function animateDead(el) {
     // you start again with 1 life
@@ -204,13 +212,10 @@ function animateDead(el) {
     // sorcery to remove death
     el.classList.remove("death");
     // show the plus and minus buttons for this player
-    var plusButton = el.nextElementSibling.children[0];
-    plusButton.classList.remove("hidden");
-    var minusButton = el.nextElementSibling.children[1];
-    minusButton.classList.remove("hidden");
+    show(null, el.nextElementSibling.children[0]);
+    show(null, el.nextElementSibling.children[1]);
     // hide the resurrection button
-    var backFromTheDeadButton = el.nextElementSibling.children[2];
-    backFromTheDeadButton.classList.add("hidden");
+    hide(null, el.nextElementSibling.children[2]);
 }
 function displayLife(el, intTotal) {
     // is the player dead yet?
@@ -279,14 +284,9 @@ function replay(e) {
 }
 function restart(e) {
     // show the choose number of players container
-    var choose = document.getElementById("choose");
-    choose.classList.remove("hidden");
-    // hide the top menu button
-    var menuButton = document.getElementById("menu_button");
-    menuButton.classList.add("hidden");
+    show("choose");
     // hide the players container
-    var play = document.getElementById("play");
-    play.classList.add("hidden");
+    hide("play");
     // end of turn for menu
     closeSlideMenu(e);
 }
@@ -347,7 +347,7 @@ function handleSwipeRight(e) {
         g_slideOutMenu.open();
     }
 }
-function getCurrentColor(e) {
+function getPlayerTile(e) {
     // what were we pressing on?
     var targetButton = e.target;
     // only handle plus / minus button press up events
@@ -355,13 +355,21 @@ function getCurrentColor(e) {
         // get the player tile element that has the class with the background color on it from the page on the site with the stuff
         var playerTile = targetButton.parentElement.parentElement;
         if (playerTile != null && playerTile.classList.contains("tile")) {
-            // this returns a rgb string like so "rgb(30, 144, 255)"
-            return window.getComputedStyle(playerTile).getPropertyValue("background-color");
+            return playerTile;
         }
     }
     return null;
 }
+function getCurrentColor(el) {
+    // verify a player tile was passed in
+    if (el != null && el.classList.contains("tile")) {
+        // this returns a rgb string like so "rgb(30, 144, 255)"
+        return window.getComputedStyle(el).getPropertyValue("background-color");
+    }
+    return null;
+}
 function RgbStringToHex(rgb) {
+    // do all the maths during the upkeep
     rgb = rgb.substr(4).split(")")[0].split(",");
 
     var r = (+rgb[0]).toString(16),
@@ -375,11 +383,76 @@ function RgbStringToHex(rgb) {
     return "#" + r + g + b;
 }
 function handlePressUp(e) {
-    var currentColorRgb = getCurrentColor(e);
-    if (currentColorRgb != null) {
-        var hex = RgbStringToHex(currentColorRgb);
-        // todo implement colorpicker flyout
+    // what player tile was pressed?
+    var playerTile = getPlayerTile(e);
+    if (playerTile != null) {
+        // what is the current color of the player tile?
+        var currentColorRgb = getCurrentColor(playerTile);
+        if (currentColorRgb != null) {
+            // hexerei
+            var hex = RgbStringToHex(currentColorRgb);
+            // go baby go!
+            openColorpicker(playerTile, hex);
+        }
     }
+}
+var g_elPlayerTile = null;
+var g_currentColor = null;
+function colorSelected(el) {
+    var selectedColor = el.dataset.color;
+    if (g_elPlayerTile != null) {
+        g_elPlayerTile.style.backgroundColor = selectedColor;
+    }
+    closeColorpicker();
+}
+function showColorpicker() {
+    show("colorpicker");
+}
+function hideColorpicker() {
+    hide("colorpicker");
+}
+function openColorpicker(el, hex) {
+    g_elPlayerTile = el;
+    g_currentColor = hex;
+    showMask();
+    showColorpicker();
+    var selectedColor = document.getElementById(hex);
+    if (selectedColor != null) {
+        selectedColor.focus();
+    }
+}
+function closeColorpicker() {
+    g_elPlayerTile = null;
+    g_currentColor = null;
+    hideMask();
+    hideColorpicker();
+}
+function initColorpicker() {
+    var colorContainer = document.getElementById("colorpicker");
+    var bgColorArray = ["#b22222", "#e00000", "#d90073", "#ce9ae4",
+                        "#911eb4", "#2e86c1", "#0000ff", "#000080",
+                        "#138d75", "#228b22", "#28b463", "#016171",
+                        "#fec007", "#fe730e", "#fc6f53", "#f0e68c",
+                        "#a0522d", "#000000", "#6d7a70", "#ffffff"];
+    for (var i=0; i < bgColorArray.length; i++) {
+        var rgbColor = bgColorArray[i];
+        var button = document.createElement("input");
+        button.id = rgbColor;
+        button.type = "button";
+        button.className = "swatch";
+        button.dataset.color = rgbColor;
+        button.style.backgroundColor = rgbColor;
+        button.addEventListener("click", function(e) {
+            colorSelected(this);
+        }, false);
+        colorContainer.appendChild(button);
+    }
+}
+function showMask() {
+    show("mask");
+}
+function hideMask() {
+    hide("mask");
 }
 function initTouchyFeelyHandsyStuff(el) {
     // you *can* touch this, it's hammer time
@@ -449,12 +522,6 @@ window.addEventListener("DOMContentLoaded", function(e) {
         "tolerance": 70
     });
     g_slideOutMenu.enableTouch();
-    var toggleButtons = document.getElementsByClassName("toggle-button");
-    for (var f = 0; f < toggleButtons.length; f++) {
-        toggleButtons[f].addEventListener("click", function(e) {
-            g_slideOutMenu.toggle();
-        }, false);
-    }
     g_slideOutMenu.on("beforeopen", function() {
         this.panel.classList.add("panel-open");
     });
@@ -480,9 +547,20 @@ window.addEventListener("DOMContentLoaded", function(e) {
     restartButton.addEventListener("click", function(e) {
         restart(e);
     }, false);
+    // add handler for the random start button
+    var randomButton = document.getElementById("random");
+    randomButton.addEventListener("click", function(e) {
+        closeSlideMenu(e);
+        showFirstPlayerDialog();
+    }, false);
     // add handler for the first player dialog button
     var startPlayerButton = document.getElementById("starting_player_dialog_button");
     startPlayerButton.addEventListener("click", function(e) {
         hideFirstPlayerDialog();
+    }, false);
+    // ooooh, pretty colors
+    initColorpicker();
+    document.addEventListener("onselectstart", function() {
+        return false;
     }, false);
 });
