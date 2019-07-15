@@ -13,6 +13,7 @@ self.addEventListener("install", function(event) {
                 "slideout.min.js",
                 "head.png",
                 "menu-hr.png",
+                "commander.png",
                 "skull.gif"
             ]);
         })

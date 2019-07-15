@@ -39,7 +39,7 @@
         <div id="menu" class="menu">
             <div class="head menu-head">&nbsp;</div>
             <input id="restart" type="button" class="menu-button" title="Start a new game and choose the number of players and starting life" value="New Game" />
-            <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Replay" />
+            <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Rematch" />
             <input id="random" type="button" class="menu-button" title="Choose a random player to start the round" value="Random Player" />
             <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
             <div class="menu-divider"></div>
@@ -67,107 +67,144 @@
                 </select>
                 <div class="label">Number of players</div>
                 <div class="button-row-top">
-                    <input type="button" class="player-button" value="2" title="Two players" />
+                    <input type="button" class="fancy-button player-button" value="2" title="Two players" />
                 </div>
                 <div class="button-table">
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="player-button" value="3" title="Three players" />
+                            <input type="button" class="fancy-button player-button" value="3" title="Three players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="player-button" value="4" title="Four players" />
+                            <input type="button" class="fancy-button player-button" value="4" title="Four players" />
                         </div>
                     </div>
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="player-button" value="5" title="Five players" />
+                            <input type="button" class="fancy-button player-button" value="5" title="Five players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="player-button" value="6" title="Six players" />
+                            <input type="button" class="fancy-button player-button" value="6" title="Six players" />
                         </div>
                     </div>
                     <div class="button-row">
                         <div class="button-column1">
-                            <input type="button" class="player-button" value="7" title="Seven players" />
+                            <input type="button" class="fancy-button player-button" value="7" title="Seven players" />
                         </div>
                         <div class="button-column2">
-                            <input type="button" class="player-button" value="8" title="Eight players" />
+                            <input type="button" class="fancy-button player-button" value="8" title="Eight players" />
                         </div>
                     </div>
                 </div>
             </div>
             <div id="play" class="play hidden">
                 <div class="tile noise c0 hidden">
-                    <div id="d1" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d1" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d1" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d1" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c1 hidden">
-                    <div id="d2" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d2" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d2" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d2" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c2 hidden">
-                    <div id="d3" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d3" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d3" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d3" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c3 hidden">
-                    <div id="d4" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d4" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d4" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d4" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c4 hidden">
-                    <div id="d5" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d5" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d5" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d5" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c5 hidden">
-                    <div id="d6" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d6" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d6" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d6" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c6 hidden">
-                    <div id="d7" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d7" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d7" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d7" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
                 <div class="tile noise c7 hidden">
-                    <div id="d8" class="life"></div>
+                    <div class="life"></div>
+                    <div class="commander-damage hidden">
+                        <div class="commander-damage-total"></div>
+                    </div>
                     <div class="buttons">
-                        <input type="button" class="plus" data-id="d8" value="+" title="+" />
-                        <input type="button" class="minus" data-id="d8" value="-" title="-" />
-                        <input type="button" class="animate hidden" data-id="d8" title="Animate Dead" />
+                        <input type="button" class="plus" value="<" title="+" />
+                        <input type="button" class="minus" value=">" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" />
                     </div>
                 </div>
             </div>
         </div>
-        <div id="starting_player_dialog" class="starting-player-dialog hidden">
-            <div id="starting_player_dialog_text" class="starting-player-dialog-text"></div>
-            <input id="starting_player_dialog_button" type="button" class="starting-player-dialog-button" value="OK" title="OK" />
+        <div id="starting_player" class="dialog starting-player hidden">
+            <div id="starting_player_text" class="starting-player-text"></div>
+            <input id="starting_player_button" type="button" class="fancy-button starting-player-button" value="OK" title="OK" />
         </div>
-        <div id="colorpicker" class="colorpicker hidden"></div>
+        <div id="context_menu" class="dialog context-menu hidden">
+            <input id="context_menu_close" type="button" class="dialog-close" title="Close this menu" value="X" />
+            <input id="color" type="button" class="fancy-button context-menu-button" title="Change the color for this player" value="Change Color" />
+            <input id="commander" type="button" class="fancy-button context-menu-button" title="Add Commander damage for this player" value="Commander Damage" />
+        </div>
+        <div id="colorpicker" class="dialog colorpicker hidden">
+            <input id="colorpicker_close" type="button" class="dialog-close" title="Close this menu" value="X" />
+        </div>
+        <div id="commander_damage" class="dialog commander-damage-dialog hidden">
+            <input id="commander_damage_close" type="button" class="dialog-close" title="Close this menu" value="X" />
+            <div class="commander-damage-text">Commander damage</div>
+            <input id="commander_damage_input" type="number" class="commander-damage-input" min="0" max="21" step="1" value="2"/>
+            <input id="commander_damage_button" type="button" class="fancy-button commander-damage-button" data-damage="2" value="OK" title="OK" />
+        </div>
         <script type="application/javascript" src="hammer.2.0.8.min.js"></script>
         <script type="application/javascript" src="slideout.min.js"></script>
         <script type="application/javascript" src="counter.min.js"></script>
