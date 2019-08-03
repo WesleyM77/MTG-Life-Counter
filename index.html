@@ -2,13 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Shall we play a game? A MtG Life Counter</title>
+        <title>Do you play Magic?</title>
         <meta name="description" content="A web app for keeping track of life points when playing Magic the Gathering. Used as a lifecounter for duel, Commander, two-headed giant, teams, pentagram, emperor, and free-for-all games. Supports 2 to 8 players and multiple values for starting life.">
         <meta name="generator" content="Mitch Dombrausky's Brain">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
         <meta name="google" content="notranslate">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#000000">
+        <link rel="manifest" type="application/manifest+json" href="site.webmanifest">
         <link rel="stylesheet" type="text/css" href="counter.min.css">
         <!-- start icons and thumbnails from the Wizards of the Coast Magic the Gathering website -->
         <link rel="icon" type="image/png" href="https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-144.png">
@@ -41,19 +43,21 @@
             <input id="restart" type="button" class="menu-button" title="Start a new game and choose the number of players and starting life" value="New Game" />
             <input id="replay" type="button" class="menu-button" title="Replay the last game with the same number of players and starting life" value="Rematch" />
             <input id="random" type="button" class="menu-button" title="Choose a random player to start the round" value="Random Player" />
-            <input id="fullscreen" type="button" class="menu-button" title="Enter fullscreen mode" value="Fullscreen" />
-            <div class="menu-divider"></div>
-            <a class="menu-button" href="https://magic.wizards.com/en/game-info/gameplay/rules-and-formats/rules" target="_new" title="Magic the Gathering Rules">Rules</a>
-            <a class="menu-button" href="https://gatherer.wizards.com/Pages/Advanced.aspx" target="_new" title="Gatherer Advanced Search">Card Search</a>
-            <a class="menu-button" href="https://www.cardmarket.com/en/Magic" target="_new" title="cardmarket.com/en/Magic">cardmarket</a>
-            <a class="menu-button" href="mailto:achimba@hotmail.com" title="Email Mitch about issues and feature requests">Contact</a>
+            <input id="fullscreen" type="button" class="menu-button" title="Toggle fullscreen mode" value="Fullscreen" />
+            <div id="extra_buttons">
+                <div class="menu-divider"></div>
+                <a class="menu-button" href="https://magic.wizards.com/en/game-info/gameplay/rules-and-formats/rules" target="_blank" rel="nofollow noopener" title="Magic the Gathering Rules! There are also rules to play the game">Rules</a>
+                <a class="menu-button" href="https://gatherer.wizards.com/Pages/Advanced.aspx" target="_blank" rel="nofollow noopener" title="Gatherer Advanced Card Search">Card Search</a>
+                <a class="menu-button" href="https://www.cardmarket.com/en/Magic" target="_blank" rel="nofollow noopener" title="Magic cards on cardmarket.com">cardmarket</a>
+                <a class="menu-button" href="mailto:achimba@hotmail.com?subject=MtG%20Counter%20Feedback" target="_blank" title="Email Mitch about issues and feature requests or just to say hi">Contact</a>
+            </div>
             <div class="credits">
-                ©2019 Mitch D<a class="mitch" href="#" target="_new">o</a>mbrausky
+                ©2019 Mitch D<a class="mitch" href="#" target="_blank">o</a>mbrausky
                 Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
             </div>
         </div>
         <div id="panel" class="panel">
-            <div id="choose" class="choose">
+            <div id="choose" class="choose" data-slideout-ignore="true">
                 <div class="head">&nbsp;</div>
                 <div class="label">Starting life</div>
                 <select id="start_life" class="start-life" title="Select the number of life points for this game">
@@ -103,9 +107,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c1 hidden">
@@ -114,9 +118,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c2 hidden">
@@ -125,9 +129,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c3 hidden">
@@ -136,9 +140,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c4 hidden">
@@ -147,9 +151,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c5 hidden">
@@ -158,9 +162,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c6 hidden">
@@ -169,9 +173,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
                 <div class="tile noise c7 hidden">
@@ -180,9 +184,9 @@
                         <div class="commander-damage-total"></div>
                     </div>
                     <div class="buttons">
-                        <input type="button" class="plus" value="<" title="+" />
-                        <input type="button" class="minus" value=">" title="-" />
-                        <input type="button" class="animate hidden" title="Animate Dead" />
+                        <input type="button" class="plus" value="+" title="+" />
+                        <input type="button" class="minus" value="-" title="-" />
+                        <input type="button" class="animate hidden" title="Animate Dead" value=" " />
                     </div>
                 </div>
             </div>
@@ -205,8 +209,8 @@
             <input id="commander_damage_input" type="number" class="commander-damage-input" min="0" max="21" step="1" value="2"/>
             <input id="commander_damage_button" type="button" class="fancy-button commander-damage-button" data-damage="2" value="OK" title="OK" />
         </div>
-        <script type="application/javascript" src="hammer.2.0.8.min.js"></script>
-        <script type="application/javascript" src="slideout.min.js"></script>
-        <script type="application/javascript" src="counter.min.js"></script>
+        <script src="hammer.2.0.8.min.js"></script>
+        <script src="slideout.min.js"></script>
+        <script src="counter.min.js"></script>
     </body>
 </html>

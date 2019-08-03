@@ -73,17 +73,24 @@ function getParamAndValidate(urlParams, paramName, rangeBottom, rangeTop) {
 }
 function handleQueryString()
 {
-    // check for query params
-    var urlParams = new URLSearchParams(location.search);
-    // we are looking for "p" which is number of players
-    // and "l" which is the starting life total
-    if (urlParams != null && (urlParams.has("p") || urlParams.has("l"))) {
-        // check yourself before you wreck yourself
-        var numberPlayers = getParamAndValidate(urlParams, "p", 2, 8);
-        var startingLife = getParamAndValidate(urlParams, "l", 1, 999);
-        if (numberPlayers != null) {
-            g_numberPlayers = numberPlayers;
+    // I've been searching for a heart of gold
+    if (location.search != null && location.search != "") {
+        // check for query params
+        var urlParams = new window.URLSearchParams(location.search);
+        // we are looking for "p" which is number of players
+        // and "l" which is the starting life total
+        if (urlParams != null && (urlParams.has("p") || urlParams.has("l"))) {
+            // check yourself before you wreck yourself
+            var numberPlayers = getParamAndValidate(urlParams, "p", 2, 8);
+            if (numberPlayers != null) {
+                g_numberPlayers = numberPlayers;
+            } else {
+                // default to duel
+                g_numberPlayers = 2;
+            }
+            var startingLife = getParamAndValidate(urlParams, "l", 1, 999);
             if (startingLife == null) {
+                // default to the standard 20 life points
                 startingLife = 20;
             }
             // round 1: fight!
@@ -588,7 +595,6 @@ function handleCommanderDamage(e) {
     }
     // sweet dreams little dialog
     closeCommanderDamageDialog();
-    // TODO kill player when 21 commander points
 }
 var g_numberPlayers = 0;
 function newGame(startingLife) {
@@ -641,6 +647,15 @@ function animateDead(el) {
     // hide the resurrection button
     hide(null, el.nextElementSibling.nextElementSibling.children[2]);
 }
+// if we leave the battlefield we want to destroy
+// the menubuttons which link to the other planes
+function handleConnectionChange(isOnline) {
+    if (isOnline) {
+        show("extra_buttons");
+    } else {
+        hide("extra_buttons");
+    }
+}
 function handlePressUp(e) {
     // what player tile was pressed?
     var playerTile = getPlayerTileFromEvent(e);
@@ -651,28 +666,31 @@ function handlePressUp(e) {
             // hexerei
             var hex = RgbStringToHex(currentColorRgb);
             // go baby go!
-            openContextMenu(e, playerTile, hex);
+            // just open colorpicker
+            openColorpicker(playerTile, hex);
+            // open context menu
+            // todo: need to implement Commander damage correctly
+            //openContextMenu(e, playerTile, hex);
         }
     }
 }
 function handleSwipeLeft(e) {
-    if (g_slideOutMenu != null) {
-        // we gotta close now, you don't have
-        // to go home but you can't stay here
-        g_slideOutMenu.close();
-    }
+    closeSlideMenu(e);
 }
 function handleSwipeRight(e) {
-    if (g_slideOutMenu != null) {
-        // yay! we're doing stuff
-        g_slideOutMenu.open();
-    }
+    openSlideMenu(e);
 }
 var g_slideOutMenu = null;
-function closeSlideMenu(e) {
-  e.preventDefault();
+function openSlideMenu(e) {
   if (g_slideOutMenu != null) {
       // we like to move it move it
+      g_slideOutMenu.open();
+  }
+}
+function closeSlideMenu(e) {
+  if (g_slideOutMenu != null) {
+      // we gotta close now, you don't have
+      // to go home but you can't stay here
       g_slideOutMenu.close();
   }
 }
@@ -680,15 +698,12 @@ function initTouchyFeelyHandsyStuff(el) {
     // you *can* touch this, it's hammer time
     var hammerTime = new Hammer(el);
     hammerTime.on("swipeleft", function(e) {
-        e.preventDefault();
         handleSwipeLeft(e);
     });
     hammerTime.on("swiperight", function(e) {
-        e.preventDefault();
         handleSwipeRight(e);
     });
     hammerTime.on("pressup", function(e) {
-        e.preventDefault();
         handlePressUp(e);
     });
 }
@@ -801,5 +816,12 @@ window.addEventListener("DOMContentLoaded", function(e) {
     // just don't
     document.addEventListener("onselectstart", function() {
         return false;
+    }, false);
+    // connection
+    window.addEventListener("online", function(e) {
+        handleConnectionChange(true);
+    }, false);
+    window.addEventListener("offline", function(e) {
+        handleConnectionChange(false);
     }, false);
 });

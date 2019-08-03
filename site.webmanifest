@@ -1,0 +1,17 @@
+{
+  "start_url": ".",
+  "scope": "/mtg/",
+  "name": "Mitch's MtG Life Counter",
+  "short_name": "Life Counter",
+  "icons": [{
+    "sizes": "192x192",
+    "src": "https://magic.wizards.com/sites/all/themes/wiz_mtg/icons/touch-icon-192.png",
+    "type": "image/png"
+  }],
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "en",
+  "dir": "ltr",
+  "display": "fullscreen",
+  "orientation": "any"
+}

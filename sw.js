@@ -3,17 +3,11 @@ self.addEventListener("install", function(event) {
         caches.open("v1").then(function(cache) {
             return cache.addAll([
                 "index.html",
-                "counter.css",
                 "counter.min.css",
-                "counter.js",
                 "counter.min.js",
-                "hammer.2.0.8.js",
                 "hammer.2.0.8.min.js",
-                "slideout.js",
                 "slideout.min.js",
                 "head.png",
-                "menu-hr.png",
-                "commander.png",
                 "skull.gif"
             ]);
         })
