@@ -3,12 +3,14 @@ self.addEventListener("install", function(event) {
         caches.open("v1").then(function(cache) {
             return cache.addAll([
                 "index.html",
-                "counter.min.css",
-                "counter.min.js",
+                "counter.css",
+                "counter.js",
                 "hammer.2.0.8.min.js",
                 "slideout.min.js",
-                "head.png",
-                "skull.gif"
+                "img/head.png",
+                "img/hr.png",
+                "img/skull.gif",
+                "img/touch-icon-192.png"
             ]);
         })
     );
@@ -24,7 +26,7 @@ self.addEventListener("fetch", function(event) {
                 return response;
             });
         }).catch(function() {
-            return caches.match("skull.gif");
+            return caches.match("img/skull.gif");
         })
     );
 });
