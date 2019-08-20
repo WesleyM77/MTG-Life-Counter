@@ -333,10 +333,17 @@ function openColorpicker(el, hex) {
         selectedColor.focus();
     }
 }
+function clearColorpickerFocus() {
+    var swatches = document.getElementsByClassName("swatch");
+    for (var i=0; i<swatches.length; i++) {
+        swatches[i].blur();
+    }
+}
 function closeColorpicker() {
     gColorpickerPlayerTile = null;
     gColorpickerCurrentColor = null;
     hideColorpicker();
+    clearColorpickerFocus();
 }
 function colorSelected(el) {
     var selectedColor = el.dataset.color;
@@ -389,15 +396,20 @@ function handleSwipeLeft(e) {
     closeSlideMenu(e);
 }
 function initTouchyFeelyHandsyStuff(el) {
-    var hammerTime = new Hammer(el);
+    var hammerTime = new Hammer.Manager(el);
+    hammerTime.add(new Hammer.Tap({ event: "singletap", taps: 1 }));
+    hammerTime.add(new Hammer.Press({ event: "pressup", time: 1000 }));
+    hammerTime.add(new Hammer.Swipe());
+    hammerTime.get("pressup").recognizeWith("singletap");
+    hammerTime.get("singletap").requireFailure("pressup");
+    hammerTime.on("pressup", function(e) {
+        handlePressUp(e);
+    });
     hammerTime.on("swipeleft", function(e) {
         handleSwipeLeft(e);
     });
     hammerTime.on("swiperight", function(e) {
         handleSwipeRight(e);
-    });
-    hammerTime.on("pressup", function(e) {
-        handlePressUp(e);
     });
 }
 function getStartingLife() {
@@ -540,10 +552,6 @@ window.addEventListener("DOMContentLoaded", function(e) {
     initPage();
 });
 class Player {
-    playerNumber = null;
-    life = null;
-    tile = null;
-    color = null;
     constructor(playerNumber, life, tile, color) {
         this.playerNumber = playerNumber;
         this.life = life;
