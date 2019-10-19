@@ -4,6 +4,7 @@ input:focus { outline: none; }
 .body { margin: 0px; border: 0px; padding: 0px; width: 100vw; height: 100vh; position: relative; }
 .noselect { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 .menu { height: 100%; padding: 30px 3px 0px 3px; overflow: hidden; background-color: #1D1F20; }
+.menu .menu-scroll { height: 100%; overflow-y: auto; }
 .head { background-image: url(img/head.png); background-repeat: no-repeat; background-position: top center; background-size: 23vh; height: 9vh; overflow: hidden; }
 .menu-head { margin: 0px 0px 20px 0px; }
 .menu-button { display: block; width: 100%; background-color: transparent; color: #e8e9e9; margin: 0px; border: 0px; padding: 8px; font-size: 125%; text-align: center; cursor: pointer; text-decoration: none; text-shadow: 1px 2px 3px rgba(0,0,0,0.5); }
@@ -11,6 +12,10 @@ input:focus { outline: none; }
 .menu-divider { height: 19px; margin: 5px 5px 5px 5px; background-image: url(img/hr.png); background-repeat: no-repeat; background-position: center center; }
 .mitch { color: #e8e9e9; text-decoration: none; cursor: default; }
 .credits { position: absolute; bottom: 0px; display: block; width: 100%; color: #e8e9e9; font-size: 11px; text-align: justify; padding: 0px 8px 3px 3px; cursor: default; }
+  @media screen and (max-height: 474px) {
+    .credits { display: none; }
+    .menu-head { margin: 0px 0px 0px 0px; }
+  }
 .panel { display: flex; flex-direction: column; height: 100%; width: 100%; overflow: hidden; }
 .panel:before { content: ""; display: block; background-color: rgba(0,0,0,0); transition: background-color 0.5s ease-in-out; }
 .panel-open:before { z-index: 99; position: absolute; top: 0px; bottom: 0px; width: 100%; background-color: rgba(0,0,0,.5); }

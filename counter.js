@@ -455,22 +455,22 @@ function initSlideMenu() {
 }
 function initSlideMenuButtons() {
     var restartButton = document.getElementById("restart");
-    restartButton.addEventListener("click", function(e) {
+    restartButton.addEventListener("mousedown", function(e) {
         closeSlideMenu(e);
         restart(e);
     }, false);
     var replayButton = document.getElementById("replay");
-    replayButton.addEventListener("click", function(e) {
+    replayButton.addEventListener("mousedown", function(e) {
         closeSlideMenu(e);
         replay(e);
     }, false);
     var randomButton = document.getElementById("random");
-    randomButton.addEventListener("click", function(e) {
+    randomButton.addEventListener("mousedown", function(e) {
         closeSlideMenu(e);
         openFirstPlayerDialog();
     }, false);
     var fullscreenButton = document.getElementById("fullscreen");
-    fullscreenButton.addEventListener("click", function(e) {
+    fullscreenButton.addEventListener("mousedown", function(e) {
         closeSlideMenu(e);
         toggleFullScreen(e);
     }, false);
@@ -481,7 +481,7 @@ function initPlusMinusButtons() {
         var buttons  = document.getElementsByClassName(buttonClasses[i]);
         for (var j=0; j<buttons.length; j++) {
             var btn = buttons[j];
-            btn.addEventListener("click", function(e) {
+            btn.addEventListener("mousedown", function(e) {
                 changeLifeValue(e.srcElement);
             }, false);
             initTouchyFeelyHandsyStuff(btn);
