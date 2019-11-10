@@ -453,6 +453,23 @@ function initSlideMenu() {
         this.panel.removeEventListener("click", closeSlideMenu, false);
     });
 }
+function isStandaloneMode() {
+    var returnValue = false;
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        returnValue = true;
+    }
+    if (!returnValue) {
+        if (window.navigator.standalone === true) {
+            returnValue = true;
+        }
+    }
+    if (!returnValue) {
+        if (window.location.search.includes("standalone")) {
+            returnValue = true;
+        }
+    }
+    return returnValue;
+}
 function initSlideMenuButtons() {
     var restartButton = document.getElementById("restart");
     restartButton.addEventListener("mousedown", function(e) {
@@ -470,10 +487,14 @@ function initSlideMenuButtons() {
         openFirstPlayerDialog();
     }, false);
     var fullscreenButton = document.getElementById("fullscreen");
-    fullscreenButton.addEventListener("mousedown", function(e) {
-        closeSlideMenu(e);
-        toggleFullScreen(e);
-    }, false);
+    if (isStandaloneMode()) {
+        fullscreenButton.classList.add("hidden");
+    } else {
+        fullscreenButton.addEventListener("mousedown", function (e) {
+            closeSlideMenu(e);
+            toggleFullScreen(e);
+        }, false);
+    }
 }
 function initPlusMinusButtons() {
     var buttonClasses = ["plus", "minus"];

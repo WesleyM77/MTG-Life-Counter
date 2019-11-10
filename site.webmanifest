@@ -1,5 +1,5 @@
 {
-  "start_url": "https://www.achimba.tech/mtg/index.html",
+  "start_url": "https://www.achimba.tech/mtg/index.html?standalone=true",
   "scope": "/mtg/",
   "name": "Mitch's MtG Life Counter",
   "short_name": "Life Counter",
