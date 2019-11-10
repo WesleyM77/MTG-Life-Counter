@@ -78,23 +78,12 @@ function getLifeDiv(playerNumber) {
     }
     return lifeDiv;
 }
-function getCommanderDiv(playerNumber) {
+function getButtonsDiv(playerNumber) {
     var lifeDiv = getLifeDiv(playerNumber);
     if (lifeDiv == null) {
         return null;
     }
-    var commanderDiv = lifeDiv.nextElementSibling;
-    if (commanderDiv == null) {
-        return null;
-    }
-    return commanderDiv;
-}
-function getButtonsDiv(playerNumber) {
-    var commanderDiv = getCommanderDiv(playerNumber);
-    if (commanderDiv == null) {
-        return null;
-    }
-    var buttonsDiv = commanderDiv.nextElementSibling;
+    var buttonsDiv = lifeDiv.nextElementSibling;
     if (buttonsDiv == null) {
         return null;
     }
@@ -191,24 +180,6 @@ function setLayout() {
             break;
     }
 }
-function initCommanderDamage() {
-    for (var i=1; i<gNumberOfPlayers+1; i++) {
-        for (var j=1; j<gNumberOfPlayers+1; j++) {
-            if (i != j) {
-                var damageDiv = getCommanderDiv(i);
-                if (damageDiv != null) {
-                    var playerNumberString = j.toString();
-                    var el = document.createElement("span");
-                    el.className = "commander-damage-total hidden c" + playerNumberString;
-                    el.innerText = "20";
-                    el.style.width = 100 / (gNumberOfPlayers-1) + "%";
-                    el.id = "player" + playerNumberString + "commander";
-                    damageDiv.appendChild(el);
-                }
-            }
-        }
-    }
-}
 function initStartingLife() {
     var divs = document.getElementsByClassName("life");
     for (var i=0; i<divs.length; i++) {
@@ -238,7 +209,6 @@ function newGame() {
     raiseTheDead();
     initPlayers();
     initStartingLife();
-    initCommanderDamage();
     setLayout();
     hide("choose");
     show("play");
