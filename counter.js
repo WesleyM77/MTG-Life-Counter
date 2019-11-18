@@ -1,11 +1,14 @@
 "use strict";
 
 var gStartingLife = null;
-var gNumberOfPlayers = null;
+var gNumberOfPlayers = 0;
 var gPlayers = Array(9).fill(null);
 var gSlideOutMenu = null;
 var gColorpickerPlayerTile = null;
 var gColorpickerCurrentColor = null;
+var gTimeDiv = null;
+var gGameTimer = null;
+var gGameTime = 0;
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").then(function(reg) {
@@ -119,7 +122,8 @@ function playerLayoutHelper(arrClassNames) {
     var allThePlayerTiles = document.getElementsByClassName("tile");
     for (var i=0; i<allThePlayerTiles.length; i++) {
         var playerTile = allThePlayerTiles[i];
-        playerTile.className = "tile hidden c" + (i+1).toString();
+        playerTile.removeAttribute("style");
+        playerTile.className = "tile hidden c" + (i + 1).toString();
         if (i < gNumberOfPlayers) {
             playerTile.classList.remove("hidden");
             var classToAdd = arrClassNames[i];
@@ -205,6 +209,67 @@ function raiseTheDead() {
         animateDead(playerTile);
     }
 }
+function intToHHMMSS(secondsInt) {
+    var hours = Math.floor(secondsInt / 3600);
+    var minutes = Math.floor((secondsInt - (hours * 3600)) / 60);
+    var seconds = secondsInt - (hours * 3600) - (minutes * 60);
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    return hours + ':' + minutes + ':' + seconds;
+}
+function displayGameTimer() {
+    gGameTime = gGameTime + 1;
+    var gameTime = intToHHMMSS(gGameTime);
+    gTimeDiv.innerText = gameTime;
+}
+function restartGameTimer() {
+    killGameTimer();
+    initGameTimer();
+}
+function clearGameTimer() {
+    window.clearInterval(gGameTimer);
+    gGameTimer = null;
+}
+function resetGameTime() {
+    gGameTime = 0;
+    gTimeDiv.innerText = "00:00:00";
+}
+function killGameTimer() {
+    clearGameTimer();
+    resetGameTime();
+}
+function closeGameTimer() {
+    hide("time_container");
+    killGameTimer();
+    var allThePlayerTiles = document.getElementsByClassName("tile");
+    for (var i = 0; i < allThePlayerTiles.length; i++) {
+        var playerTile = allThePlayerTiles[i];
+        var height = "50%";
+        if (gNumberOfPlayers == 5 || gNumberOfPlayers == 6) {
+            height = "33.3%";
+        } else if (gNumberOfPlayers == 7 || gNumberOfPlayers == 8) {
+            height = "25%";
+        }
+        playerTile.style.height = height;
+    }
+}
+function initGameTimer() {
+    gGameTimer = setInterval("displayGameTimer()", 1000);
+}
+function startGameTimer() {
+    if (gGameTimer != null) {
+        killGameTimer();
+    }
+    gTimeDiv = document.getElementById("time");
+    initGameTimer();
+}
 function newGame() {
     raiseTheDead();
     initPlayers();
@@ -212,9 +277,12 @@ function newGame() {
     setLayout();
     hide("choose");
     show("play");
+    show("time_container");
+    startGameTimer();
 }
 function restart(e) {
     show("choose");
+    killGameTimer();
     hide("play");
 }
 function replay(e) {
@@ -466,6 +534,16 @@ function initSlideMenuButtons() {
         }, false);
     }
 }
+function initGameTimerButtons() {
+    var resetTimer = document.getElementById("time_reset");
+    resetTimer.addEventListener("click", function (e) {
+        restartGameTimer();
+    }, false);
+    var closeTimer = document.getElementById("time_close");
+    closeTimer.addEventListener("click", function (e) {
+        closeGameTimer();
+    }, false);
+}
 function initPlusMinusButtons() {
     var buttonClasses = ["plus", "minus"];
     for (var i=0; i<buttonClasses.length; i++) {
@@ -535,6 +613,7 @@ window.addEventListener("DOMContentLoaded", function(e) {
     initNumberOfPlayersButtons();
     initSlideMenu();
     initSlideMenuButtons();
+    initGameTimerButtons();
     initPlusMinusButtons();
     initAnimateButtons();
     initDialogButtons();
