@@ -50,13 +50,21 @@ button:focus { outline: none; }
 .c7 { background-color: #a0522d; }
 .c8 { background-color: #ce9ae4; }
 .two-t,
-.two-b { display: block; height: 48%; font-size: 20vmax; }
+.two-b { display: block; font-size: 20vmax; }
 .two-t { -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg); }
 .four-t-l, .four-t-r,
-.four-b-l, .four-b-r { display: inline-block ; float: left; width: 50%; height: 48%; }
+.four-b-l, .four-b-r { display: inline-block ; float: left; width: 50%; }
 .four-t-l, .four-t-r { -ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg); }
-.five, .six { display: inline-block; float: left; width: 50%; height: 32%; }
-.seven, .eight { display: inline-block; float: left; width: 50%; height: 24%; }
+.five, .six { display: inline-block; float: left; width: 50%; }
+.seven, .eight { display: inline-block; float: left; width: 50%; }
+.two-t, .two-b { height: 50%; }
+.four-t-l, .four-t-r, .four-b-l, .four-b-r { height: 50%; }
+.five, .six { height: 33.3%; }
+.seven, .eight { height: 25%; }
+.two-t.timer, .two-b.timer { height: 48%; }
+.four-t-l.timer, .four-t-r.timer, .four-b-l.timer, .four-b-r.timer { height: 48%; }
+.five.timer, .six.timer { height: 32%; }
+.seven.timer, .eight.timer { height: 24%; }
 .slideout-menu { z-index: 0; position: fixed; top: 0px; bottom: 0px; width: 256px; min-height: 100vh; overflow-y: scroll; -webkit-overflow-scrolling: touch; display: none; }
 .slideout-menu-left { left: 0px; }
 .slideout-menu-right { right: 0px; }
@@ -68,13 +76,15 @@ button:focus { outline: none; }
 .mask { z-index: 700; background: rgba(0,0,0,0.5); position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; }
 .dialog { position: absolute; top: 50%; left: 50%; border: 2px solid #000000; border-radius: 7px; padding: 5px; background-color: #eeeeee; }
 .dialog-close { position: absolute; top: -14px; right: -14px; width: 24px; height: 24px; margin: 0px; border: 2px solid #e8e9e9; border-radius: 14px; padding: 0px 0px 0px 0px; background-color: #000000; color: #e8e9e9; font-size: 12pt; }
-.starting-player { z-index: 800; width: 250px; height: 101px; margin: -54px 0px 0px -125px; }
+.starting-player { z-index: 800; width: 250px; height: 101px; margin: -51px 0px 0px -125px; }
 .starting-player-text { color: #000000; font-size: 20pt; text-align: center; padding: 5px 0px 10px 0px; }
 .starting-player-button { font-size: 20pt; margin: 0px 0px 0px 0px; }
-.colorpicker { z-index: 802; position: absolute; top: 50%; left: 50%; width: 256px; height: 316px; margin: -158px 0px 0px -128px; padding: 5px;  }
+.colorpicker { z-index: 802; width: 256px; height: 316px; margin: -158px 0px 0px -128px; padding: 5px;  }
 .swatch { float: left; height: 60px; width: 60px; overflow: hidden; font-size: 0px; margin: 0px; border: 3px solid #eeeeee; padding: 0px; }
 .swatch:hover { border-color: #ff0000; }
 .swatch:focus { border-color: #ff0000; }
+.more-commands { z-index: 803; width: 300px; height: 226px; margin: -113px 0px 0px -150px; }
+.more-commands-button { display: block; font-size: 18pt; margin: 0px 0px 6px 0px; }
 .time-container { overflow: hidden; height: 32px; background-color: #000000; color: #ffffff; }
 .time { width: 80%; float: left; text-align: center; padding: 3px 0px 0px 0px; font-size: 24px; }
 .time-close,

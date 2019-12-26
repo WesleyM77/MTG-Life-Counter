@@ -6,9 +6,10 @@ var gPlayers = Array(9).fill(null);
 var gSlideOutMenu = null;
 var gColorpickerPlayerTile = null;
 var gColorpickerCurrentColor = null;
-var gTimeDiv = null;
 var gGameTimer = null;
 var gGameTime = 0;
+var gSettingShowColorpicker = true;
+var gSettingShowTimer = false;
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").then(function(reg) {
@@ -122,12 +123,14 @@ function playerLayoutHelper(arrClassNames) {
     var allThePlayerTiles = document.getElementsByClassName("tile");
     for (var i=0; i<allThePlayerTiles.length; i++) {
         var playerTile = allThePlayerTiles[i];
-        playerTile.removeAttribute("style");
         playerTile.className = "tile hidden c" + (i + 1).toString();
         if (i < gNumberOfPlayers) {
             playerTile.classList.remove("hidden");
             var classToAdd = arrClassNames[i];
             playerTile.classList.add(classToAdd);
+            if (gSettingShowTimer) {
+                playerTile.classList.add("timer");
+            }
         }
     }
 }
@@ -144,7 +147,7 @@ function playerLayoutFour() {
     playerLayoutHelper(classNames);
 }
 function playerLayoutFive() {
-    var classNames = Array(5).fill("five");
+    var  classNames = Array(5).fill("five");
     playerLayoutHelper(classNames);
 }
 function playerLayoutSix() {
@@ -227,7 +230,8 @@ function intToHHMMSS(secondsInt) {
 function displayGameTimer() {
     gGameTime = gGameTime + 1;
     var gameTime = intToHHMMSS(gGameTime);
-    gTimeDiv.innerText = gameTime;
+    var timeDiv = document.getElementById("time");
+    timeDiv.innerText = gameTime;
 }
 function restartGameTimer() {
     killGameTimer();
@@ -239,7 +243,8 @@ function clearGameTimer() {
 }
 function resetGameTime() {
     gGameTime = 0;
-    gTimeDiv.innerText = "00:00:00";
+    var timeDiv = document.getElementById("time");
+    timeDiv.innerText = "00:00:00";
 }
 function killGameTimer() {
     clearGameTimer();
@@ -248,17 +253,18 @@ function killGameTimer() {
 function closeGameTimer() {
     hide("time_container");
     killGameTimer();
-    var allThePlayerTiles = document.getElementsByClassName("tile");
-    for (var i = 0; i < allThePlayerTiles.length; i++) {
-        var playerTile = allThePlayerTiles[i];
-        var height = "50%";
-        if (gNumberOfPlayers == 5 || gNumberOfPlayers == 6) {
-            height = "33.3%";
-        } else if (gNumberOfPlayers == 7 || gNumberOfPlayers == 8) {
-            height = "25%";
-        }
-        playerTile.style.height = height;
-    }
+    gSettingShowTimer = false;
+    setLayout();
+    show("show_timer");
+    hide("hide_timer");
+}
+function openGameTimer() {
+    show("time_container");
+    startGameTimer();
+    gSettingShowTimer = true;
+    setLayout();
+    show("hide_timer");
+    hide("show_timer");
 }
 function initGameTimer() {
     gGameTimer = setInterval("displayGameTimer()", 1000);
@@ -267,7 +273,6 @@ function startGameTimer() {
     if (gGameTimer != null) {
         killGameTimer();
     }
-    gTimeDiv = document.getElementById("time");
     initGameTimer();
 }
 function newGame() {
@@ -277,8 +282,11 @@ function newGame() {
     setLayout();
     hide("choose");
     show("play");
-    show("time_container");
-    startGameTimer();
+    if (gSettingShowTimer) {
+        openGameTimer();
+    } else {
+        displayShowTimerButton();
+    }
 }
 function restart(e) {
     show("choose");
@@ -287,6 +295,51 @@ function restart(e) {
 }
 function replay(e) {
     newGame();
+}
+function displayHideTimerButton() {
+    hide("show_timer");
+    show("hide_timer");
+}
+function displayShowTimerButton() {
+    hide("hide_timer");
+    show("show_timer");
+}
+function settingShowTimer() {
+    closeMoreCommandsDialog();
+    displayHideTimerButton();
+    openGameTimer();
+}
+function settingHideTimer() {
+    closeMoreCommandsDialog();
+    displayShowTimerButton();
+    closeGameTimer();
+}
+function settingShowRandomPlayer() {
+    closeMoreCommandsDialog();
+    openFirstPlayerDialog();
+}
+function settingShowColorpicker() {
+    closeMoreCommandsDialog();
+    gSettingShowColorpicker = true;
+    hide("show_colorpicker");
+    show("hide_colorpicker");
+}
+function settingHideColorpicker() {
+    closeMoreCommandsDialog();
+    gSettingShowColorpicker = false;
+    hide("hide_colorpicker");
+    show("show_colorpicker");
+}
+function openHelp() {
+    window.open("https://www.achimba.tech/mtg/help.html", "_blank");
+}
+function openMoreCommandsDialog() {
+    showMask();
+    show("more_commands");
+}
+function closeMoreCommandsDialog() {
+    hideMask();
+    hide("more_commands");
 }
 function handleConnectionChange(isOnline) {
     if (isOnline) {
@@ -318,7 +371,7 @@ function death(playerTile) {
     var lifeDiv = playerTile.firstElementChild;
     lifeDiv.innerText = "";
     lifeDiv.classList.add("death");
-    var buttonsDiv = lifeDiv.nextElementSibling.nextElementSibling;
+    var buttonsDiv = lifeDiv.nextElementSibling;
     hide(null, buttonsDiv.children[0]);
     hide(null, buttonsDiv.children[1]);
     show(null, buttonsDiv.children[2]);
@@ -326,7 +379,7 @@ function death(playerTile) {
 function animateDead(playerTile) {
     var lifeDiv = playerTile.firstElementChild;
     lifeDiv.classList.remove("death");
-    var buttonsDiv = lifeDiv.nextElementSibling.nextElementSibling;
+    var buttonsDiv = lifeDiv.nextElementSibling;
     changeLifeValue(buttonsDiv.children[0]);
     show(null, buttonsDiv.children[0]);
     show(null, buttonsDiv.children[1]);
@@ -417,13 +470,15 @@ function closeSlideMenu(e) {
     }
 }
 function handlePressUp(e) {
-    var player = getPlayerFromAttribute(e.target);
-    var playerTile = player.getTile();
-    if (playerTile != null) {
-        var currentColorRgb = getCurrentColor(playerTile);
-        if (currentColorRgb != null) {
-            var hex = RgbStringToHex(currentColorRgb);
-            openColorpicker(playerTile, hex);
+    if (gSettingShowColorpicker) {
+        var player = getPlayerFromAttribute(e.target);
+        var playerTile = player.getTile();
+        if (playerTile != null) {
+            var currentColorRgb = getCurrentColor(playerTile);
+            if (currentColorRgb != null) {
+                var hex = RgbStringToHex(currentColorRgb);
+                openColorpicker(playerTile, hex);
+            }
         }
     }
 }
@@ -433,22 +488,26 @@ function handleSwipeRight(e) {
 function handleSwipeLeft(e) {
     closeSlideMenu(e);
 }
-function initTouchyFeelyHandsyStuff(el) {
-    var hammerTime = new Hammer.Manager(el);
+function initTouchyFeelyHandsyStuffPlusMinus(el) {
+    var hammerTime = getHammerTimeSwipe(el);
     hammerTime.add(new Hammer.Tap({ event: "singletap", taps: 1 }));
     hammerTime.add(new Hammer.Press({ event: "pressup", time: 1000 }));
-    hammerTime.add(new Hammer.Swipe());
     hammerTime.get("pressup").recognizeWith("singletap");
     hammerTime.get("singletap").requireFailure("pressup");
-    hammerTime.on("pressup", function(e) {
+    hammerTime.on("pressup", function (e) {
         handlePressUp(e);
     });
-    hammerTime.on("swipeleft", function(e) {
-        handleSwipeLeft(e);
-    });
-    hammerTime.on("swiperight", function(e) {
+}
+function getHammerTimeSwipe(el) {
+    var hammerTime = new Hammer.Manager(el);
+    hammerTime.add(new Hammer.Swipe());
+    hammerTime.on("swiperight", function (e) {
         handleSwipeRight(e);
     });
+    return hammerTime;
+}
+function initTouchyFeelyHandsyStuffAnimate(el) {
+    getHammerTimeSwipe(el);
 }
 function getStartingLife() {
     var selectStartingLife = document.getElementById("start_life");
@@ -464,32 +523,43 @@ function handleNumberOfPlayersSelection(e) {
     gStartingLife = getStartingLife();
     newGame();
 }
+function handleError(error) {
+    alert("wtf? " + error);
+}
 function initNumberOfPlayersButtons() {
-    var numberPlayersButtons  = document.getElementsByClassName("player-button");
-    for (var i=0; i<numberPlayersButtons.length; i++) {
-        numberPlayersButtons[i].addEventListener("click", function(e) {
-            handleNumberOfPlayersSelection(e);
-        }, false);
+    try {
+        var numberPlayersButtons = document.getElementsByClassName("player-button");
+        for (var i = 0; i < numberPlayersButtons.length; i++) {
+            numberPlayersButtons[i].addEventListener("click", function (e) {
+                handleNumberOfPlayersSelection(e);
+            }, false);
+        }
+    } catch (e) {
+        handleError(e);
     }
 }
 function initSlideMenu() {
-    gSlideOutMenu = new Slideout({
-        "panel": document.getElementById("panel"),
-        "menu": document.getElementById("menu"),
-        "padding": 256,
-        "tolerance": 70
-    });
-    gSlideOutMenu.enableTouch();
-    gSlideOutMenu.on("beforeopen", function() {
-        this.panel.classList.add("panel-open");
-    });
-    gSlideOutMenu.on("open", function() {
-        this.panel.addEventListener("click", closeSlideMenu, false);
-    });
-    gSlideOutMenu.on("beforeclose", function() {
-        this.panel.classList.remove("panel-open");
-        this.panel.removeEventListener("click", closeSlideMenu, false);
-    });
+    try {
+        gSlideOutMenu = new Slideout({
+            "panel": document.getElementById("panel"),
+            "menu": document.getElementById("menu"),
+            "padding": 256,
+            "tolerance": 70
+        });
+        gSlideOutMenu.enableTouch();
+        gSlideOutMenu.on("beforeopen", function () {
+            this.panel.classList.add("panel-open");
+        });
+        gSlideOutMenu.on("open", function () {
+            this.panel.addEventListener("click", closeSlideMenu, false);
+        });
+        gSlideOutMenu.on("beforeclose", function () {
+            this.panel.classList.remove("panel-open");
+            this.panel.removeEventListener("click", closeSlideMenu, false);
+        });
+    } catch (e) {
+        handleError(e);
+    }
 }
 function isStandaloneMode() {
     var returnValue = false;
@@ -509,105 +579,171 @@ function isStandaloneMode() {
     return returnValue;
 }
 function initSlideMenuButtons() {
-    var restartButton = document.getElementById("restart");
-    restartButton.addEventListener("mousedown", function(e) {
-        closeSlideMenu(e);
-        restart(e);
-    }, false);
-    var replayButton = document.getElementById("replay");
-    replayButton.addEventListener("mousedown", function(e) {
-        closeSlideMenu(e);
-        replay(e);
-    }, false);
-    var randomButton = document.getElementById("random");
-    randomButton.addEventListener("mousedown", function(e) {
-        closeSlideMenu(e);
-        openFirstPlayerDialog();
-    }, false);
-    var fullscreenButton = document.getElementById("fullscreen");
-    if (isStandaloneMode()) {
-        fullscreenButton.classList.add("hidden");
-    } else {
-        fullscreenButton.addEventListener("mousedown", function (e) {
+    try {
+        var restartButton = document.getElementById("restart");
+        restartButton.addEventListener("mousedown", function (e) {
             closeSlideMenu(e);
-            toggleFullScreen(e);
+            restart(e);
         }, false);
+        var replayButton = document.getElementById("replay");
+        replayButton.addEventListener("mousedown", function (e) {
+            closeSlideMenu(e);
+            replay(e);
+        }, false);
+        var moreButton = document.getElementById("more");
+        moreButton.addEventListener("mousedown", function (e) {
+            closeSlideMenu(e);
+            openMoreCommandsDialog(e);
+        }, false);
+    } catch (e) {
+        handleError(e);
     }
 }
 function initGameTimerButtons() {
-    var resetTimer = document.getElementById("time_reset");
-    resetTimer.addEventListener("click", function (e) {
-        restartGameTimer();
-    }, false);
-    var closeTimer = document.getElementById("time_close");
-    closeTimer.addEventListener("click", function (e) {
-        closeGameTimer();
-    }, false);
+    try {
+        var resetTimer = document.getElementById("time_reset");
+        resetTimer.addEventListener("click", function (e) {
+            restartGameTimer();
+        }, false);
+        var closeTimer = document.getElementById("time_close");
+        closeTimer.addEventListener("click", function (e) {
+            closeGameTimer();
+        }, false);
+    } catch (e) {
+        handleError(e);
+    }
 }
 function initPlusMinusButtons() {
-    var buttonClasses = ["plus", "minus"];
-    for (var i=0; i<buttonClasses.length; i++) {
-        var buttons  = document.getElementsByClassName(buttonClasses[i]);
-        for (var j=0; j<buttons.length; j++) {
-            var btn = buttons[j];
-            btn.addEventListener("mousedown", function(e) {
-                changeLifeValue(e.srcElement);
-            }, false);
-            initTouchyFeelyHandsyStuff(btn);
+    try {
+        var buttonClasses = ["plus", "minus"];
+        for (var i = 0; i < buttonClasses.length; i++) {
+            var buttons = document.getElementsByClassName(buttonClasses[i]);
+            for (var j = 0; j < buttons.length; j++) {
+                var btn = buttons[j];
+                btn.addEventListener("mouseup", function (e) {
+                    changeLifeValue(e.srcElement);
+                }, false);
+                initTouchyFeelyHandsyStuffPlusMinus(btn);
+            }
         }
+    } catch (e) {
+        handleError(e);
     }
 }
 function initAnimateButtons() {
-    var animateDeadButtons  = document.getElementsByClassName("animate");
-    for (var i=0; i<animateDeadButtons.length; i++) {
-        animateDeadButtons[i].addEventListener("click", function(e) {
-            handleDeath(e);
-        }, false);
+    try {
+        var animateDeadButtons = document.getElementsByClassName("animate");
+        for (var i = 0; i < animateDeadButtons.length; i++) {
+            var btn = animateDeadButtons[i];
+            btn.addEventListener("click", function (e) {
+                handleDeath(e);
+            }, false);
+            initTouchyFeelyHandsyStuffAnimate(btn);
+        }
+    } catch (e) {
+        handleError(e);
     }
 }
 function initDialogButtons() {
-    var startPlayerButton = document.getElementById("starting_player_button");
-    startPlayerButton.addEventListener("click", function(e) {
-        closeFirstPlayerDialog();
-    }, false);
-    var colorpickerCloseButton = document.getElementById("colorpicker_close");
-    colorpickerCloseButton.addEventListener("click", function(e) {
-        closeColorpicker();
-    }, false);
+    try {
+        var startPlayerButton = document.getElementById("starting_player_button");
+        startPlayerButton.addEventListener("click", function (e) {
+            closeFirstPlayerDialog();
+        }, false);
+        var colorpickerCloseButton = document.getElementById("colorpicker_close");
+        colorpickerCloseButton.addEventListener("click", function (e) {
+            closeColorpicker();
+        }, false);
+        var moreCommandsCloseButton = document.getElementById("more_commands_close");
+        moreCommandsCloseButton.addEventListener("click", function (e) {
+            closeMoreCommandsDialog();
+        }, false);
+        var showTimerButton = document.getElementById("show_timer");
+        showTimerButton.addEventListener("click", function (e) {
+            settingShowTimer();
+        }, false);
+        var hideTimerButton = document.getElementById("hide_timer");
+        hideTimerButton.addEventListener("click", function (e) {
+            settingHideTimer();
+        }, false);
+        var showRandomPlayerButton = document.getElementById("random_player");
+        showRandomPlayerButton.addEventListener("click", function (e) {
+            settingShowRandomPlayer();
+        }, false);
+        var showColorpickerButton = document.getElementById("show_colorpicker");
+        showColorpickerButton.addEventListener("click", function (e) {
+            settingShowColorpicker();
+        }, false);
+        var hideColorpickerButton = document.getElementById("hide_colorpicker");
+        hideColorpickerButton.addEventListener("click", function (e) {
+            settingHideColorpicker();
+        }, false);
+        var fullscreenButton = document.getElementById("fullscreen");
+        if (isStandaloneMode()) {
+            fullscreenButton.classList.add("hidden");
+            var moreCommandsDialog = document.getElementById("more_commands");
+            moreCommandsDialog.style.height = "184px";
+            moreCommandsDialog.style.margin = "-92px 0px 0px -150px";
+        } else {
+            fullscreenButton.addEventListener("mousedown", function (e) {
+                closeMoreCommandsDialog();
+                toggleFullScreen(e);
+            }, false);
+        }
+        var helpButton = document.getElementById("help");
+        helpButton.addEventListener("click", function (e) {
+            closeMoreCommandsDialog();
+            openHelp();
+        }, false);
+    } catch (e) {
+        handleError(e);
+    }
 }
 function initColorpicker() {
-    var colorContainer = document.getElementById("colorpicker");
-    var bgColorArray = ["#b22222", "#e00000", "#d90073", "#ce9ae4",
-                        "#911eb4", "#2e86c1", "#0000ff", "#000080",
-                        "#138d75", "#228b22", "#28b463", "#016171",
-                        "#fec007", "#fe730e", "#fc6f53", "#f0e68c",
-                        "#a0522d", "#000000", "#6d7a70", "#ffffff"];
-    for (var i=0; i<bgColorArray.length; i++) {
-        var rgbColor = bgColorArray[i];
-        var button = document.createElement("input");
-        button.id = rgbColor;
-        button.type = "button";
-        button.className = "swatch";
-        button.dataset.color = rgbColor;
-        button.style.backgroundColor = rgbColor;
-        button.addEventListener("click", function(e) {
-            colorSelected(this);
-        }, false);
-        colorContainer.appendChild(button);
+    try {
+        var colorContainer = document.getElementById("colorpicker");
+        var bgColorArray = ["#b22222", "#e00000", "#d90073", "#ce9ae4",
+            "#911eb4", "#2e86c1", "#0000ff", "#000080",
+            "#138d75", "#228b22", "#28b463", "#016171",
+            "#fec007", "#fe730e", "#fc6f53", "#f0e68c",
+            "#a0522d", "#000000", "#6d7a70", "#ffffff"];
+        for (var i = 0; i < bgColorArray.length; i++) {
+            var rgbColor = bgColorArray[i];
+            var button = document.createElement("input");
+            button.id = rgbColor;
+            button.type = "button";
+            button.className = "swatch";
+            button.dataset.color = rgbColor;
+            button.style.backgroundColor = rgbColor;
+            button.addEventListener("click", function (e) {
+                colorSelected(this);
+            }, false);
+            colorContainer.appendChild(button);
+        }
+    } catch (e) {
+        handleError(e);
     }
 }
 function initConnection() {
-    window.addEventListener("online", function(e) {
-        handleConnectionChange(true);
-    }, false);
-    window.addEventListener("offline", function(e) {
-        handleConnectionChange(false);
-    }, false);
+    try {
+        window.addEventListener("online", function (e) {
+            handleConnectionChange(true);
+        }, false);
+        window.addEventListener("offline", function (e) {
+            handleConnectionChange(false);
+        }, false);
+    } catch (e) {
+        handleError(e);
+    }
 }
 function initPage() {
-    document.addEventListener("onselectstart", function() {
-        return false;
-    }, false);
+    try {
+        document.addEventListener("onselectstart", function () {
+            return false;
+        }, false);
+    } catch (e) {
+        handleError(e);
+    }
 }
 window.addEventListener("DOMContentLoaded", function(e) {
     initNumberOfPlayersButtons();
