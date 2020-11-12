@@ -331,7 +331,7 @@ function settingHideColorpicker() {
     show("show_colorpicker");
 }
 function openHelp() {
-    window.open("https://www.achimba.tech/mtg/help.html", "_blank");
+    window.open("https://www.achimba.online/mtg/help.html", "_blank");
 }
 function openMoreCommandsDialog() {
     showMask();
