@@ -137,22 +137,6 @@ function playerLayoutFour() {
     var classNames = ["four-t-l", "four-t-r", "four-b-l", "four-b-r"];
     playerLayoutHelper(classNames);
 }
-function playerLayoutFive() {
-    var  classNames = Array(5).fill("five");
-    playerLayoutHelper(classNames);
-}
-function playerLayoutSix() {
-    var classNames = Array(6).fill("six");
-    playerLayoutHelper(classNames);
-}
-function playerLayoutSeven() {
-    var classNames = Array(7).fill("seven");
-    playerLayoutHelper(classNames);
-}
-function playerLayoutEight() {
-    var classNames = Array(8).fill("eight");
-    playerLayoutHelper(classNames);
-}
 function setLayout() {
     switch (gNumberOfPlayers) {
         case 2:
@@ -163,18 +147,6 @@ function setLayout() {
             break;
         case 4:
             playerLayoutFour();
-            break;
-        case 5:
-            playerLayoutFive();
-            break;
-        case 6:
-            playerLayoutSix();
-            break;
-        case 7:
-            playerLayoutSeven();
-            break;
-        case 8:
-            playerLayoutEight();
             break;
     }
 }
@@ -333,29 +305,6 @@ function changeLifeValue(el) {
     } else if (el.className.includes("minus")) {
         player.changeLife(-1);
     }
-}
-function death(playerTile) {
-    var lifeDiv = playerTile.firstElementChild;
-    lifeDiv.innerText = "";
-    lifeDiv.classList.add("death");
-    var buttonsDiv = lifeDiv.nextElementSibling;
-    hide(null, buttonsDiv.children[0]);
-    hide(null, buttonsDiv.children[1]);
-    show(null, buttonsDiv.children[2]);
-}
-function animateDead(playerTile) {
-    var lifeDiv = playerTile.firstElementChild;
-    lifeDiv.classList.remove("death");
-    var buttonsDiv = lifeDiv.nextElementSibling;
-    changeLifeValue(buttonsDiv.children[0]);
-    show(null, buttonsDiv.children[0]);
-    show(null, buttonsDiv.children[1]);
-    hide(null, buttonsDiv.children[2]);
-}
-function handleDeath(e) {
-    var player = getPlayerFromAttribute(e.srcElement);
-    var playerTile = player.getTile();
-    animateDead(playerTile);
 }
 function showFirstPlayerDialog() {
     showMask();
@@ -587,20 +536,6 @@ function initPlusMinusButtons() {
         handleError(e);
     }
 }
-function initAnimateButtons() {
-    try {
-        var animateDeadButtons = document.getElementsByClassName("animate");
-        for (var i = 0; i < animateDeadButtons.length; i++) {
-            var btn = animateDeadButtons[i];
-            btn.addEventListener("click", function (e) {
-                handleDeath(e);
-            }, false);
-            initTouchyFeelyHandsyStuffAnimate(btn);
-        }
-    } catch (e) {
-        handleError(e);
-    }
-}
 function initDialogButtons() {
     try {
         var startPlayerButton = document.getElementById("starting_player_button");
@@ -695,7 +630,6 @@ window.addEventListener("DOMContentLoaded", function(e) {
     initSlideMenuButtons();
     initGameTimerButtons();
     initPlusMinusButtons();
-    initAnimateButtons();
     initDialogButtons();
     initColorpicker();
     initConnection();
