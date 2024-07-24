@@ -99,15 +99,6 @@ function displayLife(playerNumber, total) {
         lifeDiv.innerText = total.toString();
     }
 }
-function validateLife(life) {
-    if (life <= 0) {
-        return 0;
-    } else if (life > 666) {
-        return 666;
-    } else {
-        return life;
-    }
-}
 function changeLifeInternal(current, change) {
     if (current != null && change != null) {
         var intChange = parseInt(change);
@@ -115,7 +106,7 @@ function changeLifeInternal(current, change) {
             return current;
         } else {
             var newTotal = current + intChange;
-            return validateLife(newTotal);
+            return newTotal;
         }
     }
 }
@@ -772,11 +763,7 @@ class Player {
     }
     changeLife(i) {
         this.life = changeLifeInternal(this.life, i);
-        if (this.life <= 0) {
-            death(this.tile);
-        } else {
-            displayLife(this.playerNumber, this.life);
-        }
+        displayLife(this.playerNumber, this.life);
     }
     getTile() {
         return this.tile;

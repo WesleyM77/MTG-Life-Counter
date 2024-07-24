@@ -37,8 +37,8 @@ button:focus { outline: none; }
 .life.death { background-color: #000000; background-image: url(img/skull.gif); background-position: center center; background-size: contain; background-repeat: no-repeat; }
 .buttons { position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; }
 .plus, .minus { display: inline-block; float: left; height: 100%; width: 50%; border: 0px; background-color: transparent; color: #000000; font-family: monospace; font-size: 8vmax; cursor: pointer; }
-.plus { padding: 0px 0px 0px 10px; text-align: left; }
-.minus { padding: 0px 10px 0px 0px; text-align: right; }
+.minus { padding: 0px 0px 0px 10px; text-align: left; }
+.plus { padding: 0px 10px 0px 0px; text-align: right; }
 .plus:disabled, .minus:disabled { color: #000000; cursor: default; }
 .animate { position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; margin: 0px; border: 0px; padding: 0px; background-color: transparent; font-size: 0px; cursor: pointer; }
 .c1 { background-color: #b22222; }
