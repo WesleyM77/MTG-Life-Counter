@@ -1,4 +1,4 @@
-# mtg
+# MTG Life Counter
 A Web App life counter for MtG forked from: https://github.com/Achimba/mtg
 
 Life counter for Magic the Gathering. 

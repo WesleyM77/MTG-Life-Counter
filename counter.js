@@ -196,13 +196,6 @@ function initPlayers() {
         }
     }
 }
-function raiseTheDead() {
-    var ghosts = document.getElementsByClassName("death");
-    while (ghosts.length) {
-        var playerTile = ghosts[0].parentElement;
-        animateDead(playerTile);
-    }
-}
 function intToHHMMSS(secondsInt) {
     var hours = Math.floor(secondsInt / 3600);
     var minutes = Math.floor((secondsInt - (hours * 3600)) / 60);
@@ -267,7 +260,6 @@ function startGameTimer() {
     initGameTimer();
 }
 function newGame() {
-    raiseTheDead();
     initPlayers();
     initStartingLife();
     setLayout();
