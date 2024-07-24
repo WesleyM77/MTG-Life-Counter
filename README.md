@@ -20,3 +20,5 @@ Swipe right to open menu. Menu items:
 Swipe left or click to the right of the menu to close it. 
 
 Press and hold on a player tile to open a colorpicker allowing the user to change their player tile color. 
+
+Go wild on it or use it as is.
