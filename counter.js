@@ -296,41 +296,25 @@ function displayShowTimerButton() {
     show("show_timer");
 }
 function settingShowTimer() {
-    closeMoreCommandsDialog();
     displayHideTimerButton();
     openGameTimer();
 }
 function settingHideTimer() {
-    closeMoreCommandsDialog();
     displayShowTimerButton();
     closeGameTimer();
 }
 function settingShowRandomPlayer() {
-    closeMoreCommandsDialog();
     openFirstPlayerDialog();
 }
 function settingShowColorpicker() {
-    closeMoreCommandsDialog();
     gSettingShowColorpicker = true;
     hide("show_colorpicker");
     show("hide_colorpicker");
 }
 function settingHideColorpicker() {
-    closeMoreCommandsDialog();
     gSettingShowColorpicker = false;
     hide("hide_colorpicker");
     show("show_colorpicker");
-}
-function openHelp() {
-    window.open("https://www.achimba.online/mtg/help.html", "_blank");
-}
-function openMoreCommandsDialog() {
-    showMask();
-    show("more_commands");
-}
-function closeMoreCommandsDialog() {
-    hideMask();
-    hide("more_commands");
 }
 function handleConnectionChange(isOnline) {
     if (isOnline) {
@@ -571,20 +555,10 @@ function isStandaloneMode() {
 }
 function initSlideMenuButtons() {
     try {
-        var restartButton = document.getElementById("restart");
-        restartButton.addEventListener("mousedown", function (e) {
-            closeSlideMenu(e);
-            restart(e);
-        }, false);
-        var replayButton = document.getElementById("replay");
+        var replayButton = document.getElementById("reset");
         replayButton.addEventListener("mousedown", function (e) {
             closeSlideMenu(e);
             replay(e);
-        }, false);
-        var moreButton = document.getElementById("more");
-        moreButton.addEventListener("mousedown", function (e) {
-            closeSlideMenu(e);
-            openMoreCommandsDialog(e);
         }, false);
     } catch (e) {
         handleError(e);
@@ -645,10 +619,6 @@ function initDialogButtons() {
         colorpickerCloseButton.addEventListener("click", function (e) {
             closeColorpicker();
         }, false);
-        var moreCommandsCloseButton = document.getElementById("more_commands_close");
-        moreCommandsCloseButton.addEventListener("click", function (e) {
-            closeMoreCommandsDialog();
-        }, false);
         var showTimerButton = document.getElementById("show_timer");
         showTimerButton.addEventListener("click", function (e) {
             settingShowTimer();
@@ -672,20 +642,11 @@ function initDialogButtons() {
         var fullscreenButton = document.getElementById("fullscreen");
         if (isStandaloneMode()) {
             fullscreenButton.classList.add("hidden");
-            var moreCommandsDialog = document.getElementById("more_commands");
-            moreCommandsDialog.style.height = "184px";
-            moreCommandsDialog.style.margin = "-92px 0px 0px -150px";
         } else {
             fullscreenButton.addEventListener("mousedown", function (e) {
-                closeMoreCommandsDialog();
                 toggleFullScreen(e);
             }, false);
         }
-        var helpButton = document.getElementById("help");
-        helpButton.addEventListener("click", function (e) {
-            closeMoreCommandsDialog();
-            openHelp();
-        }, false);
     } catch (e) {
         handleError(e);
     }

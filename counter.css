@@ -11,7 +11,6 @@ button:focus { outline: none; }
 .menu-button { display: block; width: 100%; background-color: transparent; color: #e8e9e9; margin: 0px; border: 0px; padding: 8px; font-size: 125%; text-align: center; cursor: pointer; text-decoration: none; text-shadow: 1px 2px 3px rgba(0,0,0,0.5); }
 .menu-button:hover { background-color: rgba(255,255,255,0.1); }
 .menu-divider { height: 19px; margin: 5px 5px 5px 5px; background-image: url(img/hr.png); background-repeat: no-repeat; background-position: center center; }
-.mitch { color: #e8e9e9; text-decoration: none; cursor: default; }
 .credits { position: absolute; bottom: 0px; left: 0px; color: #e8e9e9; font-size: 11px; text-align: justify; padding: 0px 5px 5px 5px; cursor: default; }
 @media screen and (max-height: 424px) {
   .credits { display: none; }
